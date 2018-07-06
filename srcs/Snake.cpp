@@ -14,7 +14,7 @@ Snake::Snake( int x, int y)
 	this->_snake->push_back(std::pair<int, int>(x, y));
 	for (int i = 1; i < 4; i++)
 	{
-		this->_snake->push_back(std::pair<int, int>(x - (i * 8), y));
+		this->_snake->push_back(std::pair<int, int>(x - (i * SNAKE_SIZE), y));
 	}
 	return;
 }
@@ -47,15 +47,16 @@ void Snake::drawSnake( SDLclass *sdl )
 	for (std::vector<std::pair<int, int>> ::iterator i = this->_snake->begin(); i != this->_snake->end(); i++)
 	{
 		sdl->draw(i->first, i->second);
-		std::cout << i->first << std::endl;
-		std::cout << i->second << std::endl;
 	}
 	sdl->render();
 }
 
 void Snake::changeDirection(Direction dir)
 {
-	this->_dir = dir;
+	if ((this->_dir == left || this->_dir == right) && (dir == up || dir == down))
+		this->_dir = dir;
+	else if ((this->_dir == up || this->_dir == down) && (dir == left || dir == right))
+		this->_dir = dir;
 	return;
 }
 
@@ -68,27 +69,27 @@ void Snake::moveSnake( void )
 		x = this->_snake->begin()->first;
 		y = this->_snake->begin()->second;
 		this->_snake->pop_back();
-		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x + 8, y));
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x + SNAKE_SIZE, y));
 	}
 	if (this->_dir == left)
 	{
 		x = this->_snake->begin()->first;
 		y = this->_snake->begin()->second;
 		this->_snake->pop_back();
-		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x - 8, y));
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x - SNAKE_SIZE, y));
 	}
 	if (this->_dir == up)
 	{
 		x = this->_snake->begin()->first;
 		y = this->_snake->begin()->second;
 		this->_snake->pop_back();
-		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x, y - 8));
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x, y - SNAKE_SIZE));
 	}
 	if (this->_dir == down)
 	{
 		x = this->_snake->begin()->first;
 		y = this->_snake->begin()->second;
 		this->_snake->pop_back();
-		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x, y + 8));
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x, y + SNAKE_SIZE));
 	}
 }

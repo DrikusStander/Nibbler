@@ -11,8 +11,8 @@ SDLclass::SDLclass(int x, int y)
 	SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_CreateWindowAndRenderer(x, y, 0, &this->_window, &this->_renderer);
-	this->_rect.w = 8;
-	this->_rect.h = 8;
+	this->_rect.w = SNAKE_SIZE;
+	this->_rect.h = SNAKE_SIZE;
 	return;
 }
 
