@@ -43,12 +43,10 @@ void Snake::addBody( int x, int y)
 
 void Snake::drawSnake( SDLclass *sdl )
 {
-	sdl->clearRender();
 	for (std::vector<std::pair<int, int>> ::iterator i = this->_snake->begin(); i != this->_snake->end(); i++)
 	{
 		sdl->draw(i->first, i->second);
 	}
-	sdl->render();
 }
 
 void Snake::changeDirection(Direction dir)
@@ -92,4 +90,19 @@ void Snake::moveSnake( void )
 		this->_snake->pop_back();
 		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x, y + SNAKE_SIZE));
 	}
+}
+
+int	Snake::getHeadX( void )
+{
+	return(this->snake[0]->first);
+}
+
+int	Snake::getHeadY( void );
+{
+	return(this->snake[0]->second);
+}
+
+void Snake::growSnake( void )
+{
+	this->addBody(this->snake.end().first, this->snake.end().second)
 }

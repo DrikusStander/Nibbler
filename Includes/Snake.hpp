@@ -26,6 +26,8 @@ class Snake
 		void drawSnake( SDLclass *sdl );
 		void changeDirection(Direction dir);
 		void moveSnake( void );
+		int	getHeadX( void );
+		int	getHeadY( void );
 };
 
 #endif

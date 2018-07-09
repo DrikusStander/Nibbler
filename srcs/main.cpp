@@ -2,6 +2,7 @@
 #include "main.hpp"
 #include "Snake.hpp"
 #include "SDLclass.hpp"
+#include "Fruit.hpp"
 
 int main(int ac, char **av)
 {
@@ -31,8 +32,10 @@ int main(int ac, char **av)
 			std::cout << "Y max val: " << Y_MAX << std::endl;
 			return(-1);
 		}
+		srand(time(NULL));
 		Direction dir;
 		Snake snake(x_max / 2, y_max / 2);
+		Fruit fruit(x_max, y_max);
 		int gameover = 0;
 		SDLclass sdl(x_max, y_max);
 		while (!gameover)
@@ -41,8 +44,19 @@ int main(int ac, char **av)
 			if (dir == quit)
 				gameover = 1;
 			snake.changeDirection(dir);
+
+
+			// clears the canvas draws new items to canvas and renders canvas to screen
+			sdl.clearRender();
 			snake.drawSnake(&sdl);
+			fruit.drawFruit(&sdl);
+			sdl.render();
+
 			snake.moveSnake();
+			if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
+			{
+				fruit.newFruit();
+			}
 		}
 	}
 	return(0);
