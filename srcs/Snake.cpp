@@ -94,15 +94,56 @@ void Snake::moveSnake( void )
 
 int	Snake::getHeadX( void )
 {
-	return(this->snake[0]->first);
+	return(this->_snake->begin()->first);
 }
 
-int	Snake::getHeadY( void );
+int	Snake::getHeadY( void )
 {
-	return(this->snake[0]->second);
+	return(this->_snake->begin()->second);
 }
 
 void Snake::growSnake( void )
 {
-	this->addBody(this->snake.end().first, this->snake.end().second)
+	int x;
+	int y;
+	if (this->_dir == right)
+	{
+		x = this->_snake->begin()->first;
+		y = this->_snake->begin()->second;
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x + SNAKE_SIZE, y));
+	}
+	if (this->_dir == left)
+	{
+		x = this->_snake->begin()->first;
+		y = this->_snake->begin()->second;
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x - SNAKE_SIZE, y));
+	}
+	if (this->_dir == up)
+	{
+		x = this->_snake->begin()->first;
+		y = this->_snake->begin()->second;
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x, y - SNAKE_SIZE));
+	}
+	if (this->_dir == down)
+	{
+		x = this->_snake->begin()->first;
+		y = this->_snake->begin()->second;
+		this->_snake->insert(this->_snake->begin(), std::pair<int, int>(x, y + SNAKE_SIZE));
+	}
+}
+
+int Snake::checkCollision( int x, int y)
+{
+	int head_x = this->getHeadX();
+	int head_y = this->getHeadY();
+	std::vector<std::pair<int, int>> ::iterator start = this->_snake->begin();
+	start++;
+	if (head_x >= x - SNAKE_SIZE || head_x < 0 + SNAKE_SIZE || head_y >= y - SNAKE_SIZE || head_y <= 0 + SNAKE_SIZE)
+		return(1);
+	for (std::vector<std::pair<int, int>> ::iterator i = start; i != this->_snake->end(); i++)
+	{
+		if (head_x == i->first && head_y == i->second)
+			return(1);
+	}
+	return(0);
 }

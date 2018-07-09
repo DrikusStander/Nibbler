@@ -92,3 +92,14 @@ void		SDLclass::render( void )
 {
 	SDL_RenderPresent(this->_renderer);
 }
+
+void		SDLclass::drawBorders(int x, int y)
+{
+	SDL_SetRenderDrawColor(this->_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_Rect rect;
+	rect.x = 0;
+	rect.y = 0;
+	rect.w = x;
+	rect.h = y - SCORE_AREA;
+	SDL_RenderDrawRect(this->_renderer,	&rect);
+}

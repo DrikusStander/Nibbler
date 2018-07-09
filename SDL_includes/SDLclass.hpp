@@ -24,6 +24,7 @@ class SDLclass
 		SDLclass	const & operator=(SDLclass const & rhs);
 		Direction	getInput( void );
 		void		draw(int x, int y);
+		void		drawBorders(int x, int y);
 		void		clearRender( void );
 		void		render( void );
 };

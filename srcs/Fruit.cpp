@@ -44,7 +44,7 @@ void Fruit::newFruit( void )
 {
 	this->_x = rand() % this->_win_max_x;
 	this->_y = rand() % this->_win_max_y;
-	if (this->_x % 4 != 0 || this->_y % 4 != 0)
+	if (this->_x % SNAKE_SIZE != 0 || this->_y % SNAKE_SIZE != 0)
 		this->newFruit();
 	return;
 }

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #define SNAKE_SIZE 8
+#define SCORE_AREA 20
 enum Direction
 {
 	right = 0,

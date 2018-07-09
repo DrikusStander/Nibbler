@@ -28,6 +28,8 @@ class Snake
 		void moveSnake( void );
 		int	getHeadX( void );
 		int	getHeadY( void );
+		void growSnake( void );
+		int checkCollision( int x, int y);
 };
 
 #endif
