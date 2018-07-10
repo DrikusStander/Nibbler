@@ -9,10 +9,7 @@ Fruit::Fruit( int win_x, int win_y )
 {
 	this->_win_max_x = win_x;
 	this->_win_max_y = win_y;
-	this->_x = rand() % win_x;
-	this->_y = rand() % win_y;
-	if (this->_x % 4 != 0 || this->_y % 4 != 0)
-		this->newFruit();
+	this->newFruit();
 	return;
 }
 
@@ -42,16 +39,16 @@ Fruit const & Fruit::operator=(Fruit const & rhs)
 
 void Fruit::newFruit( void )
 {
-	this->_x = rand() % this->_win_max_x;
-	this->_y = rand() % this->_win_max_y;
-	if (this->_x % SNAKE_SIZE != 0 || this->_y % SNAKE_SIZE != 0)
+	this->_x = rand() % (this->_win_max_x - SNAKE_SIZE) + SNAKE_SIZE ;
+	this->_y = rand() % (this->_win_max_y - SNAKE_SIZE) + SNAKE_SIZE;
+	if (this->_x % SNAKE_SIZE != 0 || this->_y % SNAKE_SIZE != 0 || this->_y >= this->_win_max_y - SNAKE_SIZE || this->_x >= this->_win_max_x - SNAKE_SIZE)
 		this->newFruit();
 	return;
 }
 
 void Fruit::drawFruit( SDLclass *sdl )
 {
-	sdl->draw(this->_x, this->_y);
+	sdl->draw(this->_x, this->_y, 200, 100, 150);
 	return;
 }
 

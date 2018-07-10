@@ -43,9 +43,18 @@ void Snake::addBody( int x, int y)
 
 void Snake::drawSnake( SDLclass *sdl )
 {
+	int head = 0;
 	for (std::vector<std::pair<int, int>> ::iterator i = this->_snake->begin(); i != this->_snake->end(); i++)
 	{
-		sdl->draw(i->first, i->second);
+		if (head == 0)
+		{
+			sdl->draw(i->first, i->second, 255, 255, 0);
+			head = 1;
+		}
+		else
+			sdl->draw(i->first, i->second, 100, 255, 0);
+
+
 	}
 }
 
@@ -138,7 +147,7 @@ int Snake::checkCollision( int x, int y)
 	int head_y = this->getHeadY();
 	std::vector<std::pair<int, int>> ::iterator start = this->_snake->begin();
 	start++;
-	if (head_x >= x - SNAKE_SIZE || head_x < 0 + SNAKE_SIZE || head_y >= y - SNAKE_SIZE || head_y <= 0 + SNAKE_SIZE)
+	if (head_x >= x || head_x < 0|| head_y >= (y - SNAKE_SIZE) || head_y < 0)
 		return(1);
 	for (std::vector<std::pair<int, int>> ::iterator i = start; i != this->_snake->end(); i++)
 	{

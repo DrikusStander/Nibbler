@@ -5,6 +5,8 @@
 #include "Fruit.hpp"
 #include <unistd.h>
 
+int SCORE_AREA = 20;
+
 int main(int ac, char **av)
 {
 	if ( ac != 3)
@@ -16,6 +18,7 @@ int main(int ac, char **av)
 	{
 		int x_max;
 		int y_max;
+		int score = 0;
 		try
 		{
 			x_max = std::stoi(av[1], NULL, 10);
@@ -33,9 +36,23 @@ int main(int ac, char **av)
 			std::cout << "Y max val: " << Y_MAX << std::endl;
 			return(-1);
 		}
+		int start_x = x_max / 2;
+		int start_y = y_max / 2;
+		while ((y_max - SCORE_AREA) % SNAKE_SIZE)
+		{
+			SCORE_AREA++;
+		}
 		srand(time(NULL));
 		Direction dir;
-		Snake snake(x_max / 2, (y_max -SCORE_AREA) / 2);
+		while (start_y % SNAKE_SIZE)
+		{
+			start_y++;
+		}
+		while (start_x % SNAKE_SIZE)
+		{
+			start_x++;
+		}
+		Snake snake(start_x, start_y);
 		Fruit fruit(x_max, y_max - SCORE_AREA);
 		int gameover = 0;
 		SDLclass sdl(x_max, y_max);
@@ -52,13 +69,14 @@ int main(int ac, char **av)
 			sdl.clearRender();
 			snake.drawSnake(&sdl);
 			fruit.drawFruit(&sdl);
-			sdl.drawBorders(x_max, y_max);
+			sdl.drawBorders(x_max, y_max, score);
 			sdl.render();
 
 			if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
 			{
 				fruit.newFruit();
 				snake.growSnake();
+				score++;
 			}
 			if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
 			{

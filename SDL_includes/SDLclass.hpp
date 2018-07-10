@@ -3,7 +3,9 @@
 #define SDLCLASS_HPP
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <iostream>
+#include <sstream>
 #include "Interface.hpp"
 
 class SDLclass
@@ -23,8 +25,8 @@ class SDLclass
 		~SDLclass( void );
 		SDLclass	const & operator=(SDLclass const & rhs);
 		Direction	getInput( void );
-		void		draw(int x, int y);
-		void		drawBorders(int x, int y);
+		void		draw(int x, int y, int red, int green, int blue);
+		void		drawBorders(int x, int y, int score);
 		void		clearRender( void );
 		void		render( void );
 };

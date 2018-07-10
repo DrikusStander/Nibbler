@@ -9,6 +9,7 @@ SDLclass::SDLclass( void )
 SDLclass::SDLclass(int x, int y)
 {
 	SDL_Init(SDL_INIT_VIDEO);
+	TTF_Init();
 
 	SDL_CreateWindowAndRenderer(x, y, 0, &this->_window, &this->_renderer);
 	this->_rect.w = SNAKE_SIZE;
@@ -74,12 +75,13 @@ Direction	SDLclass::getInput( void )
 	return(this->_dir);
 }
 
-void		SDLclass::draw(int x, int y)
+void		SDLclass::draw(int x, int y, int red, int green, int blue)
 {
 	this->_rect.x = x;
 	this->_rect.y = y;
-	SDL_SetRenderDrawColor(this->_renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(this->_renderer, red, green, blue, SDL_ALPHA_OPAQUE);
 	SDL_RenderDrawRect(this->_renderer,	&this->_rect);
+	SDL_RenderFillRect(this->_renderer,	&this->_rect);
 }
 
 void		SDLclass::clearRender( void )
@@ -93,13 +95,34 @@ void		SDLclass::render( void )
 	SDL_RenderPresent(this->_renderer);
 }
 
-void		SDLclass::drawBorders(int x, int y)
+void		SDLclass::drawBorders(int x, int y, int score)
 {
 	SDL_SetRenderDrawColor(this->_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-	SDL_Rect rect;
-	rect.x = 0;
-	rect.y = 0;
-	rect.w = x;
-	rect.h = y - SCORE_AREA;
-	SDL_RenderDrawRect(this->_renderer,	&rect);
+	SDL_Rect GameWrect;
+	GameWrect.x = 0;
+	GameWrect.y = 0;
+	GameWrect.w = x;
+	GameWrect.h = y - SCORE_AREA;
+	SDL_RenderDrawRect(this->_renderer,	&GameWrect);
+	SDL_Rect ScoreWrect;
+	ScoreWrect.x = 0;
+	ScoreWrect.y = y - SCORE_AREA + 1;
+	ScoreWrect.w = x;
+	ScoreWrect.h = SCORE_AREA - 1;
+	SDL_RenderDrawRect(this->_renderer,	&ScoreWrect);
+
+	TTF_Font* font = TTF_OpenFont("./SDL_includes/Arial.ttf", 12);
+	SDL_Color foregroundColor = { 255, 255, 255, 255 };
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Score :", foregroundColor);
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(this->_renderer, textSurface);
+	SDL_Rect textLocation = { 8, y - SCORE_AREA + 2 , 50, 19 };
+
+	SDL_RenderCopy(this->_renderer, textTexture, NULL, &textLocation);
+	std::stringstream strs;
+	strs << score;
+	SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, strs.str().c_str(), foregroundColor);
+	SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(this->_renderer, scoreSurface);
+	SDL_Rect scoreLocation = { 60, y - SCORE_AREA + 2 , 20, 19 };
+	SDL_RenderCopy(this->_renderer, scoreTexture, NULL, &scoreLocation);
+
 }
