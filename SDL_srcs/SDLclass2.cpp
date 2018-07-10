@@ -1,19 +1,19 @@
 
-#include "SDLclass.hpp"
+#include "SDLclass2.hpp"
 
 int SCORE_AREA = 20;
 
-SDLclass *maker( int x, int y)
+SDLclass2 *maker( int x, int y)
 {
-   return new SDLclass(x, y);
+   return new SDLclass2(x, y);
 }
 
-SDLclass::SDLclass( void )
+SDLclass2::SDLclass2( void )
 {
 	return;
 }
 
-SDLclass::SDLclass(int x, int y)
+SDLclass2::SDLclass2(int x, int y)
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	TTF_Init();
@@ -24,7 +24,7 @@ SDLclass::SDLclass(int x, int y)
 	return;
 }
 
-SDLclass::SDLclass(SDLclass const & src)
+SDLclass2::SDLclass2(SDLclass2 const & src)
 {
 	this->_rect = src._rect;
 	this->_renderer = src._renderer;
@@ -33,14 +33,14 @@ SDLclass::SDLclass(SDLclass const & src)
 	return;
 }
 
-SDLclass::~SDLclass( void )
+SDLclass2::~SDLclass2( void )
 {
 	TTF_Quit();
 	SDL_Quit();
 	return;
 }
 
-SDLclass	const & SDLclass::operator=(SDLclass const & rhs)
+SDLclass2	const & SDLclass2::operator=(SDLclass2 const & rhs)
 {
 	this->_rect = rhs._rect;
 	this->_renderer = rhs._renderer;
@@ -49,7 +49,7 @@ SDLclass	const & SDLclass::operator=(SDLclass const & rhs)
 	return(*this);
 }
 
-Direction	SDLclass::getInput( void )
+Direction	SDLclass2::getInput( void )
 {
 	SDL_Delay(50);
 	if (SDL_PollEvent(&this->_event)) 
@@ -90,27 +90,27 @@ Direction	SDLclass::getInput( void )
 	return(this->_dir);
 }
 
-void		SDLclass::draw(int x, int y, int red, int green, int blue)
+void		SDLclass2::draw(int x, int y, int red, int green, int blue)
 {
 	this->_rect.x = x;
 	this->_rect.y = y;
-	SDL_SetRenderDrawColor(this->_renderer, red, green, blue, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(this->_renderer, red - 10, green - 10, blue - 10, SDL_ALPHA_OPAQUE);
 	SDL_RenderDrawRect(this->_renderer,	&this->_rect);
 	SDL_RenderFillRect(this->_renderer,	&this->_rect);
 }
 
-void		SDLclass::clearRender( void ) const
+void		SDLclass2::clearRender( void ) const
 {
 	SDL_SetRenderDrawColor(this->_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(this->_renderer);
 }
 
-void		SDLclass::render( void ) const
+void		SDLclass2::render( void ) const
 {
 	SDL_RenderPresent(this->_renderer);
 }
 
-void		SDLclass::drawBorders(int x, int y, int score) const
+void		SDLclass2::drawBorders(int x, int y, int score) const
 {
 	SDL_SetRenderDrawColor(this->_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_Rect GameWrect;

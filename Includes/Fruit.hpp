@@ -26,7 +26,7 @@ class Fruit
 		~Fruit( void );
 		Fruit const & operator=(Fruit const & rhs);
 		void newFruit( void );
-		void drawFruit( SDLclass *sdl );
+		void drawFruit( SDLinterface *sdl );
         int CheckFruitEaten(int x, int y);
 };
 

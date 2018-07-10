@@ -46,7 +46,7 @@ void Fruit::newFruit( void )
 	return;
 }
 
-void Fruit::drawFruit( SDLclass *sdl )
+void Fruit::drawFruit( SDLinterface *sdl )
 {
 	sdl->draw(this->_x, this->_y, 200, 100, 150);
 	return;

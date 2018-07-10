@@ -1,6 +1,6 @@
 
-#ifndef SDLCLASS_HPP
-#define SDLCLASS_HPP
+#ifndef SDLCLASS3_HPP
+#define SDLCLASS3_HPP
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -8,22 +8,16 @@
 #include <sstream>
 #include "Interface.hpp"
 
-class SDLclass : public SDLinterface
+class SDLclass3 : public SDLinterface
 {
 	private:
-		// SDL_Window		*_window;
-		// SDL_Renderer	*_renderer;
-		// SDL_Rect		_rect;
-		// SDL_Event 		_event;
-		// Direction		_dir;
-
 	protected:
-		SDLclass( void );
+		SDLclass3( void );
 	public:
-		SDLclass(int x, int y);
-		SDLclass(SDLclass const & src);
-		virtual ~SDLclass( void );
-		SDLclass	const & operator=(SDLclass const & rhs);
+		SDLclass3(int x, int y);
+		SDLclass3(SDLclass3 const & src);
+		virtual ~SDLclass3( void );
+		SDLclass3	const & operator=(SDLclass3 const & rhs);
 		virtual Direction	getInput( void );
 		virtual void		draw(int x, int y, int red, int green, int blue);
 		virtual void		drawBorders(int x, int y, int score) const;
@@ -32,7 +26,7 @@ class SDLclass : public SDLinterface
 };
 
 extern "C" {
-	SDLclass *maker(int x, int y);
+	SDLclass3 *maker(int x, int y);
 }
 
 #endif

@@ -41,7 +41,7 @@ void Snake::addBody( int x, int y)
 	this->_snake->push_back(std::pair<int, int>(x, y));
 }
 
-void Snake::drawSnake( SDLclass *sdl )
+void Snake::drawSnake( SDLinterface *sdl )
 {
 	int head = 0;
 	for (std::vector<std::pair<int, int>> ::iterator i = this->_snake->begin(); i != this->_snake->end(); i++)

@@ -1,7 +1,7 @@
 
 #include "main.hpp"
 #include "Snake.hpp"
-#include "SDLclass.hpp"
+#include "Interface.hpp"
 #include "Fruit.hpp"
 #include <unistd.h>
 
@@ -55,22 +55,85 @@ int main(int ac, char **av)
 		Snake snake(start_x, start_y);
 		Fruit fruit(x_max, y_max - SCORE_AREA);
 		int gameover = 0;
-		SDLclass sdl(x_max, y_max);
+
+		// SDLclass sdl(x_max, y_max);
+		
+		void *hndl = dlopen("lib1.so", RTLD_NOW);
+		if (hndl == NULL)
+		{
+			std::cerr << dlerror() << std::endl;
+			exit(-1);
+		}
+		void *mkr = dlsym(hndl, "maker");
+		typedef SDLinterface *(*fptr)(int, int);
+		fptr func = reinterpret_cast<fptr>(reinterpret_cast<long>(mkr));
+		SDLinterface *sdl = func(x_max, y_max);
 		while (!gameover)
 		{
-			dir = sdl.getInput();
-			if (dir == quit)
+			dir = sdl->getInput();
+			if (dir == lib1)
+			{
+				if (dlclose(hndl))
+				{
+					std::cerr << dlerror() << std::endl;
+					exit(-1);
+				}
+				hndl = dlopen("lib1.so", RTLD_NOW);
+				if (hndl == NULL)
+				{
+					std::cerr << dlerror() << std::endl;
+					exit(-1);
+				}
+				mkr = dlsym(hndl, "maker");
+				fptr func = reinterpret_cast<fptr>(reinterpret_cast<long>(mkr));
+				sdl = func(x_max, y_max);
+			}
+			else if (dir == lib2)
+			{
+				if (dlclose(hndl))
+				{
+					std::cerr << dlerror() << std::endl;
+					exit(-1);
+				}
+				hndl = dlopen("lib2.so", RTLD_NOW);
+				if (hndl == NULL)
+				{
+					std::cerr << dlerror() << std::endl;
+					exit(-1);
+				}
+				mkr = dlsym(hndl, "maker");
+				fptr func = reinterpret_cast<fptr>(reinterpret_cast<long>(mkr));
+				sdl = func(x_max, y_max);
+			}
+			else if (dir == lib3)
+			{
+				if (dlclose(hndl))
+				{
+					std::cerr << dlerror() << std::endl;
+					exit(-1);
+				}
+				hndl = dlopen("lib3.so", RTLD_NOW);
+				if (hndl == NULL)
+				{
+					std::cerr << dlerror() << std::endl;
+					exit(-1);
+				}
+				mkr = dlsym(hndl, "maker");
+				fptr func = reinterpret_cast<fptr>(reinterpret_cast<long>(mkr));
+				sdl = func(x_max, y_max);
+			}
+			else if (dir == quit)
 				gameover = 1;
 			snake.changeDirection(dir);
 
 			snake.moveSnake();
 			
 			// clears the canvas draws new items to canvas and renders canvas to screen
-			sdl.clearRender();
-			snake.drawSnake(&sdl);
-			fruit.drawFruit(&sdl);
-			sdl.drawBorders(x_max, y_max, score);
-			sdl.render();
+			sdl->clearRender();
+			snake.drawSnake(sdl);
+			fruit.drawFruit(sdl);
+			sdl->drawBorders(x_max, y_max, score);
+			sdl->render();
 
 			if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
 			{
@@ -86,6 +149,7 @@ int main(int ac, char **av)
 			
 		}
 	}
+	// delete sdl;
 	sleep(3);
 	return(0);
 }

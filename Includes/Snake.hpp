@@ -23,7 +23,7 @@ class Snake
 		~Snake( void );
 		Snake const & operator=(Snake const & rhs);
 		void addBody( int x, int y );
-		void drawSnake( SDLclass *sdl );
+		void drawSnake( SDLinterface *sdl );
 		void changeDirection(Direction dir);
 		void moveSnake( void );
 		int	getHeadX( void );
