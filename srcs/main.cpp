@@ -143,7 +143,6 @@ int main(int ac, char **av)
 				sdl->playSound(Colide);
 				usleep(400000);
 				break;
-				return(0);
 			}
 			sdl->clearRender();
 			snake.drawSnake(sdl);
@@ -158,7 +157,6 @@ int main(int ac, char **av)
 				snake.growSnake();
 				score++;
 			}
-			
 		}
 		if (sdl)
 			delete sdl;

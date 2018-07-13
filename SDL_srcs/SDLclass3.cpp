@@ -15,7 +15,7 @@ SDLclass3::SDLclass3( void )
 
 SDLclass3::SDLclass3(int x, int y, Direction dir)
 {
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	TTF_Init();
 
 	SDL_CreateWindowAndRenderer(x, y, 0, &this->_window, &this->_renderer);

@@ -15,7 +15,7 @@ SDLclass2::SDLclass2( void )
 
 SDLclass2::SDLclass2(int x, int y, Direction dir)
 {
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	TTF_Init();
 
 	SDL_CreateWindowAndRenderer(x, y, 0, &this->_window, &this->_renderer);
