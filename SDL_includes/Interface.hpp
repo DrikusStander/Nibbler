@@ -2,7 +2,20 @@
 #define INTERFACE_HPP
 
 #include "main.hpp"
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
+#include <iostream>
+#include <sstream>
+#include <thread>
+
 extern int SCORE_AREA;
+
+enum Sound
+{
+	Chew = 0,
+	Colide
+};
 
 class SDLinterface
 {
@@ -22,6 +35,11 @@ class SDLinterface
 		virtual void		drawBorders(int x, int y, int score) const = 0;
 		virtual void		clearRender( void ) const = 0;
 		virtual void		render( void ) const = 0;
+		virtual void		playSound(Sound sound) = 0;
+
 };
+
+
+
 
 #endif

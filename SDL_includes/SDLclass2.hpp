@@ -2,10 +2,7 @@
 #ifndef SDLCLASS2_HPP
 #define SDLCLASS2_HPP
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <iostream>
-#include <sstream>
+
 #include "Interface.hpp"
 
 class SDLclass2 : public SDLinterface
@@ -20,7 +17,7 @@ class SDLclass2 : public SDLinterface
 	protected:
 		SDLclass2( void );
 	public:
-		SDLclass2(int x, int y);
+		SDLclass2(int x, int y, Direction dir);
 		SDLclass2(SDLclass2 const & src);
 		virtual ~SDLclass2( void );
 		SDLclass2	const & operator=(SDLclass2 const & rhs);
@@ -29,10 +26,12 @@ class SDLclass2 : public SDLinterface
 		virtual void		drawBorders(int x, int y, int score) const;
 		virtual void		clearRender( void ) const;
 		virtual void		render( void ) const;
+		virtual void				playSound(Sound sound);
+		
 };
 
 extern "C" {
-	SDLclass2 *maker(int x, int y);
+	SDLclass2 *maker(int x, int y, Direction dir);
 }
 
 #endif

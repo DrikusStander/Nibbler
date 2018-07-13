@@ -2,11 +2,9 @@
 #ifndef SDLCLASS_HPP
 #define SDLCLASS_HPP
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <iostream>
-#include <sstream>
 #include "Interface.hpp"
+
+#define MUS_PATH "./SDL_includes/chew.wav"
 
 class SDLclass : public SDLinterface
 {
@@ -20,7 +18,7 @@ class SDLclass : public SDLinterface
 	protected:
 		SDLclass( void );
 	public:
-		SDLclass(int x, int y);
+		SDLclass(int x, int y, Direction dir );
 		SDLclass(SDLclass const & src);
 		virtual ~SDLclass( void );
 		SDLclass	const & operator=(SDLclass const & rhs);
@@ -29,10 +27,11 @@ class SDLclass : public SDLinterface
 		virtual void		drawBorders(int x, int y, int score) const;
 		virtual void		clearRender( void ) const;
 		virtual void		render( void ) const;
+		virtual void				playSound(Sound sound);
 };
 
 extern "C" {
-	SDLclass *maker(int x, int y);
+	SDLclass *maker(int x, int y, Direction dir);
 }
 
 #endif

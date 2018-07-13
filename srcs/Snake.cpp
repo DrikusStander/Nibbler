@@ -147,7 +147,7 @@ int Snake::checkCollision( int x, int y)
 	int head_y = this->getHeadY();
 	std::vector<std::pair<int, int>> ::iterator start = this->_snake->begin();
 	start++;
-	if (head_x >= x || head_x < 0|| head_y >= (y - SNAKE_SIZE) || head_y < 0)
+	if (head_x >= x || head_x < 0|| head_y >= (y ) || head_y < 0)
 		return(1);
 	for (std::vector<std::pair<int, int>> ::iterator i = start; i != this->_snake->end(); i++)
 	{

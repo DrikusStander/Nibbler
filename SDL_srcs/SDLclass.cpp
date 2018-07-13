@@ -3,9 +3,9 @@
 
 int SCORE_AREA = 20;
 
-SDLclass *maker( int x, int y)
+SDLclass *maker( int x, int y, Direction dir)
 {
-   return new SDLclass(x, y);
+   return new SDLclass(x, y, dir);
 }
 
 SDLclass::SDLclass( void )
@@ -13,14 +13,15 @@ SDLclass::SDLclass( void )
 	return;
 }
 
-SDLclass::SDLclass(int x, int y)
+SDLclass::SDLclass(int x, int y, Direction dir)
 {
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	TTF_Init();
 
 	SDL_CreateWindowAndRenderer(x, y, 0, &this->_window, &this->_renderer);
 	this->_rect.w = SNAKE_SIZE;
 	this->_rect.h = SNAKE_SIZE;
+	this->_dir = dir;
 	return;
 }
 
@@ -143,4 +144,61 @@ void		SDLclass::drawBorders(int x, int y, int score) const
 	SDL_FreeSurface(textSurface);
 	SDL_FreeSurface(scoreSurface);
 	TTF_CloseFont(font);
+}
+
+void playChew()
+{
+	Mix_Chunk *chew = NULL;
+	if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
+    {
+		std::cout << "audio error: unable to open Audio" << std::endl;
+        return;    
+    }
+	if ((chew = Mix_LoadWAV("SDL_includes/chew.wav")) == NULL)
+	{
+		std::cout << "audio error: unable to load file" << std::endl;
+		return;
+	}
+	Mix_VolumeChunk(chew, MIX_MAX_VOLUME/2);
+	Mix_PlayChannel( -1, chew, -1);
+	SDL_Delay(500);
+	Mix_FreeChunk(chew);
+}
+
+void playCrash()
+{
+	Mix_Chunk *crash = NULL;
+	if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
+    {
+		std::cout << "audio error: unable to open Audio" << std::endl;
+        return;    
+    }
+	if ((crash = Mix_LoadWAV("SDL_includes/crash.wav")) == NULL)
+	{
+		std::cout << "audio error: unable to load file" << std::endl;
+		return;
+	}
+	Mix_VolumeChunk(crash, MIX_MAX_VOLUME/2);
+	Mix_PlayChannel( -1, crash, -1);
+	SDL_Delay(500);
+	Mix_FreeChunk(crash);
+}
+
+void	SDLclass::playSound(Sound sound)
+{
+	switch (sound)
+	{
+		case Chew:
+		{
+			std::thread chew_thread(playChew);
+			chew_thread.detach();
+			break;
+		}
+		case Colide:
+		{
+			std::thread chew_thread(playCrash);
+			chew_thread.detach();
+			break;
+		}
+	}
 }

@@ -1,6 +1,6 @@
 FLAGS = -Wall -Werror -Wextra -Iincludes -ISDL_includes -std=c++11
 LIBFLAGS = -dynamiclib -flat_namespace
-SDLFLAGS = $(shell pkg-config --cflags --libs sdl2) $(shell pkg-config --cflags --libs sdl2_ttf)
+SDLFLAGS = $(shell pkg-config --cflags --libs sdl2) $(shell pkg-config --cflags --libs sdl2_ttf) $(shell pkg-config --cflags --libs sdl2_mixer)
 DIR = ./srcs/
 SDLDIR = ./SDL_srcs/
 SRCS = main.cpp Snake.cpp Fruit.cpp
@@ -24,6 +24,7 @@ dependancies:
 	brew list sdl2 &>/dev/null || brew install sdl2
 	brew list pkg-config &>/dev/null || brew install pkg-config
 	brew list sdl2_ttf &>/dev/null || brew install sdl2_ttf
+	brew list sdl2_mixer &>/dev/null || brew install sdl2_mixer
 
 clean:
 	rm -fr $(NAME) 
