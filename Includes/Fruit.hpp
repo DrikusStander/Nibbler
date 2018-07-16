@@ -28,6 +28,7 @@ class Fruit
 		void newFruit( void );
 		void drawFruit( SDLinterface *sdl );
         int CheckFruitEaten(int x, int y);
+		void	setXY(int x, int y);
 };
 
 #endif

@@ -58,3 +58,10 @@ int Fruit::CheckFruitEaten(int x, int y)
 		return(1);
 	return(0);
 }
+
+void	Fruit::setXY(int x, int y)
+{
+	this->_x = x;
+	this->_y = y;
+	return;
+}

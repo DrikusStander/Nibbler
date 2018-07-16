@@ -1,131 +1,35 @@
 
 #include "main.hpp"
-#include "Snake.hpp"
+// #include "Snake.hpp"
 #include "Interface.hpp"
-#include "Fruit.hpp"
-#include <unistd.h>
+// #include "Fruit.hpp"
+// #include <unistd.h>
+#include "GameLoop.hpp"
 
-int SCORE_AREA = 20;
-
-SDLinterface * loadLib(std::string str, void *hndl , int x_max, int y_max, Direction dir)
-{
-	if (hndl)
-	{
-		if (dlclose(hndl))
-		{
-			std::cerr << dlerror() << std::endl;
-			exit(-1);
-		}
-	}
-	hndl = dlopen(str.c_str(), RTLD_NOW);
-	if (hndl == NULL)
-	{
-		std::cerr << dlerror() << std::endl;
-		exit(-1);
-	}
-	void *mkr = dlsym(hndl, "maker");
-	typedef SDLinterface *(*fptr)(int, int, Direction);
-	fptr func = reinterpret_cast<fptr>(reinterpret_cast<long>(mkr));
-	return(func(x_max, y_max, dir));
-}
-
-int x_start(int x_max)
-{
-	int start_x = x_max / 2;
-	while (start_x % SNAKE_SIZE)
-	{
-		start_x++;
-	}
-	return(start_x);
-}
-
-int y_start(int y_max)
-{
-	int start_y = y_max / 2;
-	while ((y_max - SCORE_AREA) % SNAKE_SIZE)
-	{
-		SCORE_AREA++;
-	}
-
-	while (start_y % SNAKE_SIZE)
-	{
-		start_y++;
-	}
-	return(start_y);
-}
-
-void	gameLoop( int x_max, int y_max, int lib)
-{
-	int score = 0;
-	Direction dir = right;
-	Direction oldDir = right;
-	
-	Snake snake(x_start(x_max), y_start(y_max));
-	Fruit fruit(x_max, y_max - SCORE_AREA);
-	int gameover = 0;
-	void *hndl = NULL;
-	SDLinterface *sdl;
-	if (lib == 1)
-		sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
-	else if (lib == 2)
-		sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
-	else
-		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
-	while (!gameover)
-	{
-		dir = sdl->getInput();
-		switch(dir)
-		{
-			case lib1:
-				sdl = loadLib("lib1.so", hndl, x_max, y_max, oldDir);
-				break;
-			case lib2:
-				sdl = loadLib("lib2.so", hndl, x_max, y_max, oldDir);
-				break;
-			case lib3:
-				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
-				break;
-			case quit:
-				gameover = 1;
-				break;
-			case up:
-			case down:
-			case left:
-			case right:
-				oldDir = dir;
-				snake.changeDirection(dir);
-				break;
-		}
-		snake.moveSnake();
-		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
-		{
-			sdl->playSound(Colide);
-			usleep(400000);
-			break;
-		}
-		sdl->clearRender();
-		snake.drawSnake(sdl);
-		fruit.drawFruit(sdl);
-		sdl->drawBorders(x_max, y_max, score);
-		sdl->render();
-
-		if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
-		{
-			sdl->playSound(Chew);
-			fruit.newFruit();
-			snake.growSnake();
-			score++;
-		}
-	}
-	if (sdl)
-		delete sdl;
-}
+#include <regex>
 
 int main(int ac, char **av)
 {
-	if ( ac != 4)
+	srand(time(NULL));
+	
+	if (ac == 2)
 	{
-		std::cout << "usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+		if (std::regex_match(av[1], std::regex("([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$)")))
+			ClientGameLoop(1, av[1]);
+		else
+		{
+			std::cout << "invalid IP" << std::endl;
+			std::cout << "Single Player usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+			std::cout << "Server usage: ./Nibler <int x> <int y> <int 1-3 [lib]> <-s>" << std::endl;
+			std::cout << "Client usage: ./Nibler <Server IP>" << std::endl;
+			return(-1);
+		}
+	}
+	else if ( ac < 4 || ac > 5)
+	{
+		std::cout << "Single Player usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+		std::cout << "Server usage: ./Nibler <int x> <int y> <int 1-3 [lib]> <-s>" << std::endl;
+		std::cout << "Client usage: ./Nibler <Server IP>" << std::endl;
 		return(-1);
 	}
 	else
@@ -141,7 +45,10 @@ int main(int ac, char **av)
 		}
 		catch (...)
 		{
-			std::cout << "usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+			std::cout << "Single Player usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+			std::cout << "Server usage: ./Nibler <int x> <int y> <int 1-3 [lib]> <-s>" << std::endl;
+			std::cout << "Client usage: ./Nibler <Server IP>" << std::endl;
+			return(-1);
 		}
 		if (x_max > X_MAX || y_max > Y_MAX )
 		{
@@ -160,13 +67,32 @@ int main(int ac, char **av)
 		else if (lib < 1 || lib > 3)
 		{
 			std::cout << "Invalid Library selected" << std::endl;
-			std::cout << "usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+			std::cout << "Single Player usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+			std::cout << "Server usage: ./Nibler <int x> <int y> <int 1-3 [lib]> <-s>" << std::endl;
+			std::cout << "Client usage: ./Nibler <Server IP>" << std::endl;
+			return(-1);
 		}
-
-		srand(time(NULL));
-		try 
+		try
 		{
-			gameLoop(x_max, y_max, lib);
+			if (ac == 5)
+			{
+				std::string str(av[4]);
+				if (str == "-s")
+				{
+					ServerGameLoop(x_max, y_max, lib);
+				}
+				else
+				{
+					std::cout << "Single Player usage: ./Nibler <int x> <int y> <int 1-3 [lib]>" << std::endl;
+					std::cout << "Server usage: ./Nibler <int x> <int y> <int 1-3 [lib]> <-s>" << std::endl;
+					std::cout << "Client usage: ./Nibler <Server IP>" << std::endl;
+					return(-1);
+				}
+			}
+			else
+			{
+				gameLoop(x_max, y_max, lib);
+			}
 		}
 		catch(SDL_error &exception)
 		{

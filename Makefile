@@ -1,9 +1,9 @@
-FLAGS = -Wall -Werror -Wextra -Iincludes -ISDL_includes -std=c++11
+FLAGS = -Wall -Werror -Wextra -Iincludes -ISDL_includes -std=c++11 $(shell pkg-config --cflags --libs sdl2_net)
 LIBFLAGS = -dynamiclib -flat_namespace
 SDLFLAGS = $(shell pkg-config --cflags --libs sdl2) $(shell pkg-config --cflags --libs sdl2_ttf) $(shell pkg-config --cflags --libs sdl2_mixer)
 DIR = ./srcs/
 SDLDIR = ./SDL_srcs/
-SRCS = main.cpp Snake.cpp Fruit.cpp ../SDL_srcs/Exceptions.cpp
+SRCS = main.cpp Snake.cpp Fruit.cpp GameLoop.cpp 2PlayerLoop.cpp TCP.cpp ../SDL_srcs/Exceptions.cpp
 SDLSRC = SDLclass.cpp Exceptions.cpp
 SDLSRC2 = SDLclass2.cpp Exceptions.cpp
 SDLSRC3 = SDLclass3.cpp Exceptions.cpp
