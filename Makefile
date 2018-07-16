@@ -3,10 +3,10 @@ LIBFLAGS = -dynamiclib -flat_namespace
 SDLFLAGS = $(shell pkg-config --cflags --libs sdl2) $(shell pkg-config --cflags --libs sdl2_ttf) $(shell pkg-config --cflags --libs sdl2_mixer)
 DIR = ./srcs/
 SDLDIR = ./SDL_srcs/
-SRCS = main.cpp Snake.cpp Fruit.cpp
-SDLSRC = SDLclass.cpp
-SDLSRC2 = SDLclass2.cpp
-SDLSRC3 = SDLclass3.cpp
+SRCS = main.cpp Snake.cpp Fruit.cpp ../SDL_srcs/Exceptions.cpp
+SDLSRC = SDLclass.cpp Exceptions.cpp
+SDLSRC2 = SDLclass2.cpp Exceptions.cpp
+SDLSRC3 = SDLclass3.cpp Exceptions.cpp
 
 NAME = Nibler
 	
@@ -27,7 +27,7 @@ dependancies:
 	brew list sdl2_mixer &>/dev/null || brew install sdl2_mixer
 
 clean:
-	rm -fr $(NAME) 
+	rm -fr $(NAME)
 
 fclean: clean
 	rm -fr lib1.so lib2.so lib3.so

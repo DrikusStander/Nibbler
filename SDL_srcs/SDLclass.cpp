@@ -5,7 +5,7 @@ int SCORE_AREA = 20;
 
 SDLclass *maker( int x, int y, Direction dir)
 {
-   return new SDLclass(x, y, dir);
+	return new SDLclass(x, y, dir);
 }
 
 SDLclass::SDLclass( void )
@@ -128,16 +128,26 @@ void		SDLclass::drawBorders(int x, int y, int score) const
 	SDL_RenderDrawRect(this->_renderer,	&ScoreWrect);
 
 	TTF_Font* font = TTF_OpenFont("./SDL_includes/Arial.ttf", 12);
+	if (font == NULL)
+		throw SDL_error("Unable to open Font File");
 	SDL_Color foregroundColor = { 255, 255, 255, 255 };
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Score :", foregroundColor);
+	if (textSurface == NULL)
+		throw SDL_error("Unable to Render textSurface");
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(this->_renderer, textSurface);
+	if (textTexture == NULL)
+		throw SDL_error("Unable to Render textTexture");
 	SDL_Rect textLocation = { 8, y - SCORE_AREA + 2 , 50, 19 };
 
 	SDL_RenderCopy(this->_renderer, textTexture, NULL, &textLocation);
 	std::stringstream strs;
 	strs << score;
 	SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, strs.str().c_str(), foregroundColor);
+	if (scoreSurface == NULL)
+		throw SDL_error("Unable to Render scoreSurface");
 	SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(this->_renderer, scoreSurface);
+	if (scoreTexture == NULL)
+		throw SDL_error("Unable to Render scoreTexture");
 	SDL_Rect scoreLocation = { 60, y - SCORE_AREA + 2 , 20, 19 };
 	SDL_RenderCopy(this->_renderer, scoreTexture, NULL, &scoreLocation);
 	
@@ -150,14 +160,12 @@ void playChew()
 {
 	Mix_Chunk *chew = NULL;
 	if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
-    {
-		std::cout << "audio error: unable to open Audio" << std::endl;
-        return;    
-    }
+	{
+		throw SDL_error("Unable to open Audio File");
+	}
 	if ((chew = Mix_LoadWAV("SDL_includes/chew.wav")) == NULL)
 	{
-		std::cout << "audio error: unable to load file" << std::endl;
-		return;
+		throw SDL_error("Unable to load Audio file");
 	}
 	Mix_VolumeChunk(chew, MIX_MAX_VOLUME/2);
 	Mix_PlayChannel( -1, chew, -1);
@@ -169,14 +177,12 @@ void playCrash()
 {
 	Mix_Chunk *crash = NULL;
 	if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
-    {
-		std::cout << "audio error: unable to open Audio" << std::endl;
-        return;    
-    }
+	{
+		throw SDL_error("Unable to open Audio File");
+	}
 	if ((crash = Mix_LoadWAV("SDL_includes/crash.wav")) == NULL)
 	{
-		std::cout << "audio error: unable to load file" << std::endl;
-		return;
+		throw SDL_error("Unable to load Audio file");
 	}
 	Mix_VolumeChunk(crash, MIX_MAX_VOLUME/2);
 	Mix_PlayChannel( -1, crash, -1);

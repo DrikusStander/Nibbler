@@ -54,6 +54,73 @@ int y_start(int y_max)
 	return(start_y);
 }
 
+void	gameLoop( int x_max, int y_max, int lib)
+{
+	int score = 0;
+	Direction dir = right;
+	Direction oldDir = right;
+	
+	Snake snake(x_start(x_max), y_start(y_max));
+	Fruit fruit(x_max, y_max - SCORE_AREA);
+	int gameover = 0;
+	void *hndl = NULL;
+	SDLinterface *sdl;
+	if (lib == 1)
+		sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
+	else if (lib == 2)
+		sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
+	else
+		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+	while (!gameover)
+	{
+		dir = sdl->getInput();
+		switch(dir)
+		{
+			case lib1:
+				sdl = loadLib("lib1.so", hndl, x_max, y_max, oldDir);
+				break;
+			case lib2:
+				sdl = loadLib("lib2.so", hndl, x_max, y_max, oldDir);
+				break;
+			case lib3:
+				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
+				break;
+			case quit:
+				gameover = 1;
+				break;
+			case up:
+			case down:
+			case left:
+			case right:
+				oldDir = dir;
+				snake.changeDirection(dir);
+				break;
+		}
+		snake.moveSnake();
+		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
+		{
+			sdl->playSound(Colide);
+			usleep(400000);
+			break;
+		}
+		sdl->clearRender();
+		snake.drawSnake(sdl);
+		fruit.drawFruit(sdl);
+		sdl->drawBorders(x_max, y_max, score);
+		sdl->render();
+
+		if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
+		{
+			sdl->playSound(Chew);
+			fruit.newFruit();
+			snake.growSnake();
+			score++;
+		}
+	}
+	if (sdl)
+		delete sdl;
+}
+
 int main(int ac, char **av)
 {
 	if ( ac != 4)
@@ -65,7 +132,6 @@ int main(int ac, char **av)
 	{
 		int x_max;
 		int y_max;
-		int score = 0;
 		int lib;
 		try
 		{
@@ -98,68 +164,18 @@ int main(int ac, char **av)
 		}
 
 		srand(time(NULL));
-		Direction dir = right;
-		Direction oldDir = right;
-		
-		Snake snake(x_start(x_max), y_start(y_max));
-		Fruit fruit(x_max, y_max - SCORE_AREA);
-		int gameover = 0;
-		void *hndl = NULL;
-		SDLinterface *sdl;
-		if (lib == 1)
-			sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
-		else if (lib == 2)
-			sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
-		else
-			sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
-		while (!gameover)
+		try 
 		{
-			dir = sdl->getInput();
-			switch(dir)
-			{
-				case lib1:
-					sdl = loadLib("lib1.so", hndl, x_max, y_max, oldDir);
-					break;
-				case lib2:
-					sdl = loadLib("lib2.so", hndl, x_max, y_max, oldDir);
-					break;
-				case lib3:
-					sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
-					break;
-				case quit:
-					gameover = 1;
-					break;
-				case up:
-				case down:
-				case left:
-				case right:
-					oldDir = dir;
-					snake.changeDirection(dir);
-					break;
-			}
-			snake.moveSnake();
-			if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
-			{
-				sdl->playSound(Colide);
-				usleep(400000);
-				break;
-			}
-			sdl->clearRender();
-			snake.drawSnake(sdl);
-			fruit.drawFruit(sdl);
-			sdl->drawBorders(x_max, y_max, score);
-			sdl->render();
-
-			if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
-			{
-				sdl->playSound(Chew);
-				fruit.newFruit();
-				snake.growSnake();
-				score++;
-			}
+			gameLoop(x_max, y_max, lib);
 		}
-		if (sdl)
-			delete sdl;
+		catch(SDL_error &exception)
+		{
+			std::cout << exception.what() << std::endl;
+		}
+		catch(...)
+		{
+			std::cout << "Exception" << std::endl;
+		}
 	}
 	return(0);
 }

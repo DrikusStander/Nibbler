@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include "Exceptions.hpp"
 
 extern int SCORE_AREA;
 
