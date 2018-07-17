@@ -35,10 +35,12 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
 	while (!gameover)
 	{
-		std::cout << "start of loop" << std::endl;
-		// server.recv(&recv);
-		std::thread thread(testfunc, &server, &recv);
-		thread.detach();
+		// std::cout << "start of loop" << std::endl;
+		server.send(gameover);
+		// std::thread thread(testfunc, &server, &recv);
+		// thread.detach();
+		
+		std::cout << recv << std::endl;
 		if (recv == -2)
 		{
 			gameover = 1;
@@ -64,7 +66,8 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
 				break;
 			case quit:
-				gameover = 1;
+				gameover = -1;
+				server.send(gameover);
 				break;
 			case up:
 			case down:
@@ -98,6 +101,7 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 			snake.growSnake();
 			score++;
 		}
+		server.recv(&recv);
 	}
 	if (sdl)
 		delete sdl;
@@ -109,8 +113,6 @@ void	ClientGameLoop(int lib, std::string ip)
 	(void)lib;
 
 	TCP client(ip);
-	int one = 22;
-	client.send(one);
 	int x_max;
 	int y_max;
 	int fruit_x;
@@ -149,8 +151,11 @@ void	ClientGameLoop(int lib, std::string ip)
 	
 	while (!gameover)
 	{
-		std::thread thread(testfunc, &client, &fruit_x);
-		thread.detach();
+
+		client.send(gameover);
+		// std::thread thread(testfunc, &client, &fruit_x);
+		// thread.join();
+		std::cout << fruit_x << std::endl;
 		if (fruit_x < 0)
 		{
 			gameover = 1;
@@ -175,7 +180,8 @@ void	ClientGameLoop(int lib, std::string ip)
 				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
 				break;
 			case quit:
-				gameover = 1;
+				gameover = -1;
+				client.send(gameover);
 				break;
 			case up:
 			case down:
@@ -210,6 +216,7 @@ void	ClientGameLoop(int lib, std::string ip)
 			snake.growSnake();
 			score++;
 		}
+		client.recv(&fruit_x);
 	}
 	if (sdl)
 		delete sdl;

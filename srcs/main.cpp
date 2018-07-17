@@ -24,10 +24,10 @@ int main(int ac, char **av)
 			{
 				std::cout << exception.what() << std::endl;
 			}
-			catch(...)
-			{
-				std::cout << "Exception" << std::endl;
-			}
+			// catch(...)
+			// {
+			// 	std::cout << "Exception" << std::endl;
+			// }
 		}
 		else
 		{
