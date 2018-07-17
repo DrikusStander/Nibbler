@@ -1,10 +1,6 @@
 
 #include "GameLoop.hpp"
 
-void	testfunc(TCP *server, int *val)
-{
-	server->recv(val);
-}
 
 void	ServerGameLoop( int x_max, int y_max, int lib)
 {
@@ -14,6 +10,7 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 	server.send(y_max);
 	
 	int score = 0;
+	int op_score = 0;
 	Direction dir = right;
 	Direction oldDir = right;
 	int recv = 0;
@@ -35,12 +32,8 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
 	while (!gameover)
 	{
-		// std::cout << "start of loop" << std::endl;
 		server.send(gameover);
-		// std::thread thread(testfunc, &server, &recv);
-		// thread.detach();
-		
-		std::cout << recv << std::endl;
+		std::cout << op_score << std::endl;
 		if (recv == -2)
 		{
 			gameover = 1;
@@ -103,6 +96,12 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 		}
 		server.recv(&recv);
 	}
+	server.send(score);
+	server.recv(&op_score);
+	sdl->clearRender();
+	sdl->drawGameOver(x_max, y_max, score, op_score);
+	sdl->render();
+	sleep(4);
 	if (sdl)
 		delete sdl;
 }
@@ -123,16 +122,10 @@ void	ClientGameLoop(int lib, std::string ip)
 	client.recv(&x_max);
 	client.recv(&y_max);
 	
-	// test = client.recv();
-	// std::string str(test);
-	// if (!str.empty())
-	// 	std::cout << str << std::endl;
-	
 	int score = 0;
+	int op_score = 0;
 	Direction dir = right;
 	Direction oldDir = right;
-	// int x_max;
-	// int y_max;
 	
 	Snake snake(x_start(x_max), y_start(y_max));
 	Fruit fruit;
@@ -153,9 +146,7 @@ void	ClientGameLoop(int lib, std::string ip)
 	{
 
 		client.send(gameover);
-		// std::thread thread(testfunc, &client, &fruit_x);
-		// thread.join();
-		std::cout << fruit_x << std::endl;
+		std::cout << op_score << std::endl;
 		if (fruit_x < 0)
 		{
 			gameover = 1;
@@ -208,7 +199,6 @@ void	ClientGameLoop(int lib, std::string ip)
 		if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
 		{
 			sdl->playSound(Chew);
-			// fruit.newFruit();
 			client.send(ate_fruit);
 			fruit.setXY(fruit_x, fruit_y);
 			fruit_x = 0;
@@ -218,6 +208,12 @@ void	ClientGameLoop(int lib, std::string ip)
 		}
 		client.recv(&fruit_x);
 	}
+	client.send(score);
+	client.recv(&op_score);
+	sdl->clearRender();
+	sdl->drawGameOver(x_max, y_max, score, op_score);
+	sdl->render();
+	sleep(4);
 	if (sdl)
 		delete sdl;
 }

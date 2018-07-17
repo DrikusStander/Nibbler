@@ -37,6 +37,7 @@ class SDLinterface
 		virtual void		clearRender( void ) const = 0;
 		virtual void		render( void ) const = 0;
 		virtual void		playSound(Sound sound) = 0;
+		virtual void		drawGameOver(int x, int y, int score, int op_score) const =0;
 
 };
 

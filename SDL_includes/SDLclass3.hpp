@@ -21,6 +21,7 @@ class SDLclass3 : public SDLinterface
 		virtual void		clearRender( void ) const;
 		virtual void		render( void ) const;
 		virtual void				playSound(Sound sound);
+		void		drawGameOver(int x, int y, int score, int op_score) const;
 
 };
 
