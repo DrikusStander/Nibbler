@@ -25,6 +25,7 @@ dependancies:
 	brew list pkg-config &>/dev/null || brew install pkg-config
 	brew list sdl2_ttf &>/dev/null || brew install sdl2_ttf
 	brew list sdl2_mixer &>/dev/null || brew install sdl2_mixer
+	brew list sdl2_net &>/dev/null || brew install sdl2_net
 
 clean:
 	rm -fr $(NAME)
