@@ -1,6 +1,11 @@
 
 #include "GameLoop.hpp"
 
+void	testfunc(TCP *server, int *val)
+{
+	server->recv(val);
+}
+
 void	ServerGameLoop( int x_max, int y_max, int lib)
 {
 	TCP server;
@@ -30,7 +35,10 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
 	while (!gameover)
 	{
-		server.recv(&recv);
+		std::cout << "start of loop" << std::endl;
+		// server.recv(&recv);
+		std::thread thread(testfunc, &server, &recv);
+		thread.detach();
 		if (recv == -2)
 		{
 			gameover = 1;
@@ -141,7 +149,8 @@ void	ClientGameLoop(int lib, std::string ip)
 	
 	while (!gameover)
 	{
-		client.recv(&fruit_x);
+		std::thread thread(testfunc, &client, &fruit_x);
+		thread.detach();
 		if (fruit_x < 0)
 		{
 			gameover = 1;

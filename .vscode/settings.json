@@ -12,6 +12,7 @@
 		"algorithm": "cpp",
 		"__locale": "cpp",
 		"locale": "cpp",
-		"bitset": "cpp"
+		"bitset": "cpp",
+		"thread": "cpp"
 	}
 }
