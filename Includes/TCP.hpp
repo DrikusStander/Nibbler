@@ -5,14 +5,15 @@
 
 #include <string>
 #include <SDL_net.h>
+#include "Exceptions.hpp"
 
 class TCP 
 {
 	private:
-		TCPsocket _server;
-		TCPsocket _client;
-		IPaddress _ip;
-		char _buff[100];
+		TCPsocket	_server;
+		TCPsocket	_client;
+		IPaddress	_ip;
+		char		*_buff;
 
 	protected:
 	public:
@@ -21,8 +22,8 @@ class TCP
 		TCP( TCP const & src);
 		~TCP( void );
 		TCP const & operator=(TCP const & rhs);
-		void	send(std::string str);
-		char *	recv( void );
+		void	send(int value);
+		int		recv(int *value);
 };
 
 #endif

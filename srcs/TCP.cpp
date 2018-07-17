@@ -6,6 +6,7 @@ TCP::TCP( void )
 	SDLNet_Init();
 	SDLNet_ResolveHost(&this->_ip, NULL, 1234);
 	this->_server = SDLNet_TCP_Open(&this->_ip);
+	this->_client = NULL;
 	while(1)
 	{
 		if (!this->_client)
@@ -25,6 +26,9 @@ TCP::TCP( std::string ip)
 	SDLNet_Init();
 	SDLNet_ResolveHost(&this->_ip, ip.c_str(), 1234);
 	this->_client = SDLNet_TCP_Open(&this->_ip);
+	if (this->_client == NULL)
+		throw SDL_error("Unable to connect to server at ip: " + ip);
+	this->_server = NULL;
 	return;
 }
 
@@ -54,13 +58,17 @@ TCP const & TCP::operator=(TCP const & rhs)
 	return(*this);
 }
 
-void	TCP::send(std::string str)
+void	TCP::send(int value)
 {
-	SDLNet_TCP_Send(this->_client, str.c_str(), strlen(str.c_str()) + 1);
+	this->_buff = reinterpret_cast<char *>(&value);
+	SDLNet_TCP_Send(this->_client, this->_buff, sizeof(value));
 }
 
-char * TCP::recv( void )
+int		TCP::recv(int *value )
 {
-	SDLNet_TCP_Recv(this->_client, this->_buff, 100);
-	return(this->_buff);
+	this->_buff = reinterpret_cast<char *>(value);
+	SDLNet_TCP_Recv(this->_client, this->_buff, 4);
+	if (!this->_buff)
+		return(-42);
+	return(*this->_buff);
 }

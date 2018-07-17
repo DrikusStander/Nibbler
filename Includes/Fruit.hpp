@@ -19,8 +19,8 @@ class Fruit
         int _y;
 
 	protected:
-        Fruit( void );	
 	public:
+        Fruit( void );	
         Fruit( int win_x, int win_y );
 		Fruit( Fruit const & src);
 		~Fruit( void );
@@ -29,6 +29,8 @@ class Fruit
 		void drawFruit( SDLinterface *sdl );
         int CheckFruitEaten(int x, int y);
 		void	setXY(int x, int y);
+		int		getX( void );
+		int		getY( void );
 };
 
 #endif

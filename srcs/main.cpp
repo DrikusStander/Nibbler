@@ -15,7 +15,20 @@ int main(int ac, char **av)
 	if (ac == 2)
 	{
 		if (std::regex_match(av[1], std::regex("([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$)")))
-			ClientGameLoop(1, av[1]);
+		{
+			try
+			{
+				ClientGameLoop(1, av[1]);
+			}
+			catch(SDL_error &exception)
+			{
+				std::cout << exception.what() << std::endl;
+			}
+			catch(...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+		}
 		else
 		{
 			std::cout << "invalid IP" << std::endl;

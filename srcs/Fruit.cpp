@@ -2,6 +2,10 @@
 
 Fruit::Fruit( void )
 {
+	this->_win_max_x = 0;
+	this->_win_max_y = 0;
+	this->_x = 0;
+	this->_y = 0;
 	return;
 }
 
@@ -64,4 +68,14 @@ void	Fruit::setXY(int x, int y)
 	this->_x = x;
 	this->_y = y;
 	return;
+}
+
+int		Fruit::getX( void )
+{
+	return(this->_x);
+}
+
+int		Fruit::getY( void )
+{
+	return(this->_y);
 }
