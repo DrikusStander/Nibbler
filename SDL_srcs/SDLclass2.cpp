@@ -211,62 +211,80 @@ void	SDLclass2::playSound(Sound sound)
 
 void		SDLclass2::drawGameOver(int x, int y, int score, int op_score) const
 {
-	(void)x;
-	(void)y;
-	(void)score;
-	(void)op_score;
-// 	// SDL_SetRenderDrawColor(this->_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-// 	// SDL_Rect GameWrect;
-// 	// GameWrect.x = 0;
-// 	// GameWrect.y = 0;
-// 	// GameWrect.w = x;
-// 	// GameWrect.h = y - SCORE_AREA;
-// 	// SDL_RenderDrawRect(this->_renderer,	&GameWrect);
-// 	// SDL_Rect ScoreWrect;
-// 	// ScoreWrect.x = 0;
-// 	// ScoreWrect.y = y - SCORE_AREA + 1;
-// 	// ScoreWrect.w = x;
-// 	// ScoreWrect.h = SCORE_AREA - 1;
-// 	// SDL_RenderDrawRect(this->_renderer,	&ScoreWrect);
+	SDL_SetRenderDrawColor(this->_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_Rect GameWrect;
+	GameWrect.x = 0;
+	GameWrect.y = 0;
+	GameWrect.w = x;
+	GameWrect.h = y - SCORE_AREA;
+	SDL_RenderDrawRect(this->_renderer,	&GameWrect);
+	SDL_Rect ScoreWrect;
+	ScoreWrect.x = 0;
+	ScoreWrect.y = y - SCORE_AREA + 1;
+	ScoreWrect.w = x;
+	ScoreWrect.h = SCORE_AREA - 1;
+	SDL_RenderDrawRect(this->_renderer,	&ScoreWrect);
 
-// 	TTF_Font* font = TTF_OpenFont("./SDL_includes/Arial.ttf", 12);
-// 	if (font == NULL)
-// 		throw SDL_error("Unable to open Font File");
-// 	SDL_Color foregroundColor = { 255, 255, 255, 255 };
-// 	SDL_Surface* artSurface = TTF_RenderText_Solid(font, "  _|_|_|    _|_|    _|      _|  _|_|_|_|        _|_|    _|      _|  _|_|_|_|  _|_|_|\n   \
-//  _|        _|    _|  _|_|  _|_|  _|            _|    _|  _|      _|  _|        _|    _|\n  \
-//  _|  _|_|  _|_|_|_|  _|  _|  _|  _|_|_|        _|    _|  _|      _|  _|_|_|    _|_|_|\n    \
-//  _|    _|  _|    _|  _|      _|  _|            _|    _|    _|  _|    _|        _|    _|\n  \
-//    _|_|_|  _|    _|  _|      _|  _|_|_|_|        _|_|        _|      _|_|_|_|  _|    _|", foregroundColor);
-// 	if (artSurface == NULL)
-// 		throw SDL_error("Unable to Render textSurface");
-// 	SDL_Texture* artTexture = SDL_CreateTextureFromSurface(this->_renderer, artSurface);
-// 	if (artTexture == NULL)
-// 		throw SDL_error("Unable to Render textTexture");
-// 	SDL_Rect artLocation = { x / 2, (y - SCORE_AREA) / 2 , x, y - SCORE_AREA };
-// 	SDL_RenderCopy(this->_renderer, artTexture, NULL, &artLocation);
-	
-// 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Score :", foregroundColor);
-// 	if (textSurface == NULL)
-// 		throw SDL_error("Unable to Render textSurface");
-// 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(this->_renderer, textSurface);
-// 	if (textTexture == NULL)
-// 		throw SDL_error("Unable to Render textTexture");
-// 	SDL_Rect textLocation = { 8, y - SCORE_AREA + 2 , 50, 19 };
-// 	SDL_RenderCopy(this->_renderer, textTexture, NULL, &textLocation);
+	TTF_Font* font = TTF_OpenFont("./SDL_includes/Arial.ttf", 50);
+	if (font == NULL)
+		throw SDL_error("Unable to open Font File");
+	SDL_Color foregroundColor = { 255, 255, 255, 255 };
+	SDL_Surface* artSurface = TTF_RenderText_Solid(font, "GAME OVER", foregroundColor);
 
-// 	std::stringstream strs;
-// 	strs << score;
-// 	SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, strs.str().c_str(), foregroundColor);
-// 	if (scoreSurface == NULL)
-// 		throw SDL_error("Unable to Render scoreSurface");
-// 	SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(this->_renderer, scoreSurface);
-// 	if (scoreTexture == NULL)
-// 		throw SDL_error("Unable to Render scoreTexture");
-// 	SDL_Rect scoreLocation = { 60, y - SCORE_AREA + 2 , 20, 19 };
-// 	SDL_RenderCopy(this->_renderer, scoreTexture, NULL, &scoreLocation);
+	if (artSurface == NULL)
+		throw SDL_error("Unable to Render textSurface");
+	SDL_Texture* artTexture = SDL_CreateTextureFromSurface(this->_renderer, artSurface);
+	if (artTexture == NULL)
+		throw SDL_error("Unable to Render textTexture");
+	SDL_Rect artLocation = { x / 4, (y - SCORE_AREA) / 4 , x / 2 , (y - SCORE_AREA) / 2 };
+	SDL_RenderCopy(this->_renderer, artTexture, NULL, &artLocation);
 	
-// 	SDL_FreeSurface(textSurface);
-// 	SDL_FreeSurface(scoreSurface);
-// 	TTF_CloseFont(font);
+	font = TTF_OpenFont("./SDL_includes/Arial.ttf", 20);
+
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Score :", foregroundColor);
+	if (textSurface == NULL)
+		throw SDL_error("Unable to Render textSurface");
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(this->_renderer, textSurface);
+	if (textTexture == NULL)
+		throw SDL_error("Unable to Render textTexture");
+	SDL_Rect textLocation = { 8, y - SCORE_AREA + 2 , 50, 19 };
+	SDL_RenderCopy(this->_renderer, textTexture, NULL, &textLocation);
+
+	std::stringstream strs;
+	strs << score;
+	SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, strs.str().c_str(), foregroundColor);
+	if (scoreSurface == NULL)
+		throw SDL_error("Unable to Render scoreSurface");
+	SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(this->_renderer, scoreSurface);
+	if (scoreTexture == NULL)
+		throw SDL_error("Unable to Render scoreTexture");
+	SDL_Rect scoreLocation = { 60, y - SCORE_AREA + 2 , 20, 19 };
+	SDL_RenderCopy(this->_renderer, scoreTexture, NULL, &scoreLocation);
+	
+	SDL_Surface* opTextSurface = TTF_RenderText_Solid(font, "Opponent Score :", foregroundColor);
+	if (opTextSurface == NULL)
+		throw SDL_error("Unable to Render opTextSurface");
+	SDL_Texture* opTextTexture = SDL_CreateTextureFromSurface(this->_renderer, opTextSurface);
+	if (opTextTexture == NULL)
+		throw SDL_error("Unable to Render opTextTexture");
+	SDL_Rect opTextLocation = { x - 138, y - SCORE_AREA + 2 , 110, 19 };
+	SDL_RenderCopy(this->_renderer, opTextTexture, NULL, &opTextLocation);
+
+	std::stringstream op_strs;
+	op_strs << op_score;
+	SDL_Surface* opScoreSurface = TTF_RenderText_Solid(font, op_strs.str().c_str(), foregroundColor);
+	if (opScoreSurface == NULL)
+		throw SDL_error("Unable to Render opScoreSurface");
+	SDL_Texture* opScoreTexture = SDL_CreateTextureFromSurface(this->_renderer, opScoreSurface);
+	if (opScoreTexture == NULL)
+		throw SDL_error("Unable to Render opScoreTexture");
+	SDL_Rect opScoreLocation = { x - 28, y - SCORE_AREA + 2 , 20, 19 };
+	SDL_RenderCopy(this->_renderer, opScoreTexture, NULL, &opScoreLocation);
+
+	SDL_FreeSurface(artSurface);
+	SDL_FreeSurface(textSurface);
+	SDL_FreeSurface(scoreSurface);
+	SDL_FreeSurface(opTextSurface);
+	SDL_FreeSurface(opScoreSurface);
+	TTF_CloseFont(font);
 }

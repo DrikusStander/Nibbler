@@ -32,11 +32,10 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
 	while (!gameover)
 	{
-		server.send(gameover);
-		std::cout << op_score << std::endl;
 		if (recv == -2)
 		{
-			gameover = 1;
+			gameover = -2;
+			break;
 		}
 		else if (recv == -1)
 		{
@@ -59,8 +58,8 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
 				break;
 			case quit:
-				gameover = -1;
-				server.send(gameover);
+				gameover = -2;
+				// server.send(gameover);
 				break;
 			case up:
 			case down:
@@ -70,9 +69,14 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 				snake.changeDirection(dir);
 				break;
 		}
+		server.send(gameover);
+		if (gameover)
+			break;
 		snake.moveSnake();
 		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
 		{
+			gameover = -1;
+			server.send(gameover);
 			sdl->playSound(Colide);
 			usleep(400000);
 			break;
@@ -95,9 +99,20 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 			score++;
 		}
 		server.recv(&recv);
+		std::cout << recv << std::endl;
+
 	}
+	while (1)
+	{
+		server.recv(&op_score);
+		std::cout << "outside loop " << op_score << std::endl;
+		if (op_score)
+			break;
+	}
+	// std::cout << "outside Loop" << std::endl;
+	sleep(1);
 	server.send(score);
-	server.recv(&op_score);
+	// server.recv(&op_score);
 	sdl->clearRender();
 	sdl->drawGameOver(x_max, y_max, score, op_score);
 	sdl->render();
@@ -122,7 +137,7 @@ void	ClientGameLoop(int lib, std::string ip)
 	client.recv(&x_max);
 	client.recv(&y_max);
 	
-	int score = 0;
+	int score = 222;
 	int op_score = 0;
 	Direction dir = right;
 	Direction oldDir = right;
@@ -141,15 +156,17 @@ void	ClientGameLoop(int lib, std::string ip)
 		sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
 	else
 		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
-	
+	// usleep(100000);
 	while (!gameover)
 	{
 
-		client.send(gameover);
-		std::cout << op_score << std::endl;
+
+
+		// usleep(5000);
 		if (fruit_x < 0)
 		{
-			gameover = 1;
+			gameover = -2;
+			break;
 		}
 		else if (fruit_x > 0)
 		{
@@ -158,7 +175,10 @@ void	ClientGameLoop(int lib, std::string ip)
 			fruit_x = 0;
 			fruit_y = 0;
 		}
+
+
 		dir = sdl->getInput();
+
 		switch(dir)
 		{
 			case lib1:
@@ -171,8 +191,8 @@ void	ClientGameLoop(int lib, std::string ip)
 				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
 				break;
 			case quit:
-				gameover = -1;
-				client.send(gameover);
+				gameover = -2;
+				// client.send(gameover);
 				break;
 			case up:
 			case down:
@@ -182,9 +202,15 @@ void	ClientGameLoop(int lib, std::string ip)
 				snake.changeDirection(dir);
 				break;
 		}
-		snake.moveSnake();
+		client.send(gameover);
+		if (gameover)
+			break;
+		// snake.moveSnake();
+
+
 		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
 		{
+			gameover = -1;
 			sdl->playSound(Colide);
 			client.send(died);
 			usleep(400000);
@@ -206,10 +232,15 @@ void	ClientGameLoop(int lib, std::string ip)
 			snake.growSnake();
 			score++;
 		}
+
 		client.recv(&fruit_x);
+		std::cout << fruit_x << std::endl;
 	}
+	std::cout << "outside Loop" << std::endl;
+	sleep(1);
 	client.send(score);
 	client.recv(&op_score);
+	std::cout << op_score << std::endl;
 	sdl->clearRender();
 	sdl->drawGameOver(x_max, y_max, score, op_score);
 	sdl->render();
