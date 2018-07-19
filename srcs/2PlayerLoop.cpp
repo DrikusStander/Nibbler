@@ -137,7 +137,7 @@ void	ClientGameLoop(int lib, std::string ip)
 	client.recv(&x_max);
 	client.recv(&y_max);
 	
-	int score = 222;
+	int score = 0;
 	int op_score = 0;
 	Direction dir = right;
 	Direction oldDir = right;
@@ -205,7 +205,7 @@ void	ClientGameLoop(int lib, std::string ip)
 		client.send(gameover);
 		if (gameover)
 			break;
-		// snake.moveSnake();
+		snake.moveSnake();
 
 
 		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
