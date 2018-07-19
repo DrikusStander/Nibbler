@@ -1,9 +1,6 @@
 
 #include "main.hpp"
-// #include "Snake.hpp"
 #include "Interface.hpp"
-// #include "Fruit.hpp"
-// #include <unistd.h>
 #include "GameLoop.hpp"
 
 #include <regex>
