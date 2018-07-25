@@ -8,12 +8,6 @@
 class SDLclass2 : public SDLinterface
 {
 	private:
-		// SDL_Window		*_window;
-		// SDL_Renderer	*_renderer;
-		// SDL_Rect		_rect;
-		// SDL_Event 		_event;
-		// Direction		_dir;
-
 	protected:
 		SDLclass2( void );
 	public:
