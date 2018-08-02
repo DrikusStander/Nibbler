@@ -3,12 +3,19 @@
 #define SDLCLASS_HPP
 
 #include "Interface.hpp"
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 #define MUS_PATH "./SDL_includes/chew.wav"
 
 class SDLclass : public SDLinterface
 {
 	private:
+		SDL_Window		*_window;
+		SDL_Renderer	*_renderer;
+		SDL_Rect		_rect;
+		SDL_Event 		_event;
 	protected:
 		SDLclass( void );
 	public:

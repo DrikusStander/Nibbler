@@ -2,9 +2,7 @@
 #define INTERFACE_HPP
 
 #include "main.hpp"
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+
 #include <iostream>
 #include <sstream>
 #include <thread>
@@ -23,10 +21,10 @@ class SDLinterface
 	private:
 	protected:
 
-		SDL_Window		*_window;
-		SDL_Renderer	*_renderer;
-		SDL_Rect		_rect;
-		SDL_Event 		_event;
+		// SDL_Window		*_window;
+		// SDL_Renderer	*_renderer;
+		// SDL_Rect		_rect;
+		// SDL_Event 		_event;
 		Direction		_dir;
 
 	public:

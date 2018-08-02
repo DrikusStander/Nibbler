@@ -4,10 +4,17 @@
 
 
 #include "Interface.hpp"
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 class SDLclass3 : public SDLinterface
 {
 	private:
+		SDL_Window		*_window;
+		SDL_Renderer	*_renderer;
+		SDL_Rect		_rect;
+		SDL_Event 		_event;
 	protected:
 		SDLclass3( void );
 	public:
