@@ -4,8 +4,17 @@
 
 
 #include "Interface.hpp"
+#include "Draw.hpp"
+
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Device.H>
+#include <FL/Fl_Copy_Surface.H>
+
+
+#include <unistd.h>
+
 
 class SDLclass2 : public SDLinterface
 {
@@ -14,6 +23,10 @@ class SDLclass2 : public SDLinterface
 		// SDL_Renderer	*_renderer;
 		// SDL_Rect		_rect;
 		// SDL_Event 		_event;
+
+		Draw *_draw;
+		Fl_Window *_window;
+		int _event;
 	protected:
 		SDLclass2( void );
 	public:

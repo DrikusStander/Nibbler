@@ -7,7 +7,7 @@ DIR = ./srcs/
 SDLDIR = ./SDL_srcs/
 SRCS = main.cpp Snake.cpp Fruit.cpp GameLoop.cpp 2PlayerLoop.cpp TCP.cpp ../SDL_srcs/Exceptions.cpp
 SDLSRC = SDLclass.cpp Exceptions.cpp
-SDLSRC2 = SDLclass2.cpp Exceptions.cpp
+SDLSRC2 = SDLclass2.cpp Draw.cpp Exceptions.cpp
 SDLSRC3 = SDLclass3.cpp Exceptions.cpp
 
 NAME = Nibler
