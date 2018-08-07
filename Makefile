@@ -2,8 +2,8 @@
 FLAGS =  -Iincludes -ILibs_includes -std=c++11 $(shell pkg-config --cflags --libs sdl2_net)
 LIBFLAGS = -dynamiclib -flat_namespace
 SDLFLAGS = $(shell pkg-config --cflags --libs sdl2) $(shell pkg-config --cflags --libs sdl2_ttf) $(shell pkg-config --cflags --libs sdl2_mixer)
-FLTKFLAGS = -I/goinfre/hstander/.brew/Cellar/fltk/1.3.4-2/include -L/goinfre/hstander/.brew/Cellar/fltk/1.3.4-2/lib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT -lfltk $(shell pkg-config --cflags --libs sdl2_mixer)
-SFMLFLAGS = -I/goinfre/hstander/.brew/Cellar/sfml/2.4.2_1/include -L/goinfre/hstander/.brew/lib -lsfml-graphics -lsfml-window -lsfml-audio
+FLTKFLAGS = -I$(HOME)/.brew/Cellar/fltk/1.3.4-2/include -L$(HOME)/.brew/Cellar/fltk/1.3.4-2/lib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT -lfltk $(shell pkg-config --cflags --libs sdl2_mixer)
+SFMLFLAGS = -I$(HOME)/.brew/Cellar/sfml/2.4.2_1/include -L$(HOME)/.brew/lib -lsfml-graphics -lsfml-window -lsfml-audio
 ALLEGROFLAGS = $(shell pkg-config --cflags --libs allegro-5 allegro_audio-5 allegro_acodec-5)
 DIR = ./srcs/
 SDLDIR = ./Libs_srcs/
