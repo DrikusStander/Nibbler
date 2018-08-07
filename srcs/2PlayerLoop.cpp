@@ -14,7 +14,6 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 	Direction dir = right;
 	Direction oldDir = right;
 	int recv = 0;
-	
 	Snake snake(x_start(x_max), y_start(y_max));
 	Fruit fruit(x_max, y_max - SCORE_AREA);
 	int fruit_x = fruit.getX();
@@ -101,7 +100,6 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 			score++;
 		}
 		server.recv(&recv);
-
 	}
 	sleep(1);
 	server.send(score);
@@ -168,10 +166,7 @@ void	ClientGameLoop(int lib, std::string ip)
 			fruit_x = 0;
 			fruit_y = 0;
 		}
-
-
 		dir = sdl->getInput();
-
 		switch(dir)
 		{
 			case lib1:
@@ -201,8 +196,6 @@ void	ClientGameLoop(int lib, std::string ip)
 		if (gameover)
 			break;
 		snake.moveSnake();
-
-
 		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
 		{
 			gameover = -1;
@@ -216,7 +209,6 @@ void	ClientGameLoop(int lib, std::string ip)
 		fruit.drawFruit(sdl);
 		sdl->drawBorders(x_max, y_max, score);
 		sdl->render();
-
 		if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
 		{
 			sdl->playSound(Chew);

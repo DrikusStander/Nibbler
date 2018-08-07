@@ -123,22 +123,14 @@ void playChew()
 	al_init_acodec_addon();
 	al_reserve_samples(1);
 	sample = al_load_sample( "./Libs_includes/chew.wav" );
+	if(!sample)
+	{
+		std::cout << "Unable to load Audio file" << std::endl;
+		return;
+	}
 	al_play_sample(sample, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
 	usleep(4000000);
 	al_destroy_sample(sample);
-	// Mix_Chunk *chew = NULL;
-	// if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
-	// {
-	// 	throw SDL_error("Unable to open Audio File");
-	// }
-	// if ((chew = Mix_LoadWAV("Libs_includes/chew.wav")) == NULL)
-	// {
-	// 	throw SDL_error("Unable to load Audio file");
-	// }
-	// Mix_VolumeChunk(chew, MIX_MAX_VOLUME/2);
-	// Mix_PlayChannel( -1, chew, -1);
-	// usleep(500000);
-	// Mix_FreeChunk(chew);
 }
 
 void playCrash()
@@ -148,22 +140,14 @@ void playCrash()
 	al_init_acodec_addon();
 	al_reserve_samples(1);
 	sample = al_load_sample( "./Libs_includes/crash.wav" );
+	if(!sample)
+	{
+		std::cout << "Unable to load Audio file" << std::endl;
+		return;
+	}
 	al_play_sample(sample, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
 	usleep(4000000);
 	al_destroy_sample(sample);
-	// Mix_Chunk *crash = NULL;
-	// if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
-	// {
-	// 	throw SDL_error("Unable to open Audio File");
-	// }
-	// if ((crash = Mix_LoadWAV("Libs_includes/crash.wav")) == NULL)
-	// {
-	// 	throw SDL_error("Unable to load Audio file");
-	// }
-	// Mix_VolumeChunk(crash, MIX_MAX_VOLUME/2);
-	// Mix_PlayChannel( -1, crash, -1);
-	// usleep(500000);
-	// Mix_FreeChunk(crash);
 }
 
 void	FLTKclass::playSound(Sound sound)

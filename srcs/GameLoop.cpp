@@ -120,6 +120,10 @@ void	gameLoop( int x_max, int y_max, int lib)
 			score++;
 		}
 	}
+	sdl->clearRender();
+	sdl->drawGameOver(x_max, y_max, score, -22);
+	sdl->render();
+	sleep(4);
 	if (sdl)
 		delete sdl;
 }

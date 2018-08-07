@@ -71,7 +71,8 @@ void Draw::twoPGameover(int score, int opscore, int scoreArea)
 	fl_font(font, 72);
 	fl_draw("GAME OVER", this->_xmax / 4, (this->_ymax - scoreArea) / 2);
 	fl_font(font, size);
-	fl_draw(opstr.c_str(), (this->_xmax - 130), (this->_ymax - scoreArea) + 15);
+	if (opscore != -22)
+		fl_draw(opstr.c_str(), (this->_xmax - 130), (this->_ymax - scoreArea) + 15);
 	fl_end_offscreen();
 }
 

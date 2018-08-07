@@ -173,11 +173,13 @@ void playChew()
 	Mix_Chunk *chew = NULL;
 	if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
 	{
-		throw SDL_error("Unable to open Audio File");
+		std::cout << "Unable to Open Audio System" << std::endl;
+		return;
 	}
 	if ((chew = Mix_LoadWAV("Libs_includes/chew.wav")) == NULL)
 	{
-		throw SDL_error("Unable to load Audio file");
+		std::cout << "Unable to load Audio file" << std::endl;
+		return;
 	}
 	Mix_VolumeChunk(chew, MIX_MAX_VOLUME/2);
 	Mix_PlayChannel( -1, chew, -1);
@@ -190,11 +192,13 @@ void playCrash()
 	Mix_Chunk *crash = NULL;
 	if( Mix_OpenAudio( 44100, AUDIO_S16SYS, 2, 1024 ) < 0 )
 	{
-		throw SDL_error("Unable to open Audio File");
+		std::cout << "Unable to Open Audio System" << std::endl;
+		return;
 	}
 	if ((crash = Mix_LoadWAV("Libs_includes/crash.wav")) == NULL)
 	{
-		throw SDL_error("Unable to load Audio file");
+		std::cout << "Unable to load Audio file" << std::endl;
+		return;
 	}
 	Mix_VolumeChunk(crash, MIX_MAX_VOLUME/2);
 	Mix_PlayChannel( -1, crash, -1);
@@ -252,7 +256,6 @@ void		SDLclass::drawGameOver(int x, int y, int score, int op_score) const
 	SDL_RenderCopy(this->_renderer, artTexture, NULL, &artLocation);
 	
 	font = TTF_OpenFont("./Libs_includes/Arial.ttf", 20);
-
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Score :", foregroundColor);
 	if (textSurface == NULL)
 		throw SDL_error("Unable to Render textSurface");
@@ -273,30 +276,35 @@ void		SDLclass::drawGameOver(int x, int y, int score, int op_score) const
 	SDL_Rect scoreLocation = { 60, y - SCORE_AREA + 2 , 20, 19 };
 	SDL_RenderCopy(this->_renderer, scoreTexture, NULL, &scoreLocation);
 	
-	SDL_Surface* opTextSurface = TTF_RenderText_Solid(font, "Opponent Score :", foregroundColor);
-	if (opTextSurface == NULL)
-		throw SDL_error("Unable to Render opTextSurface");
-	SDL_Texture* opTextTexture = SDL_CreateTextureFromSurface(this->_renderer, opTextSurface);
-	if (opTextTexture == NULL)
-		throw SDL_error("Unable to Render opTextTexture");
-	SDL_Rect opTextLocation = { x - 138, y - SCORE_AREA + 2 , 110, 19 };
-	SDL_RenderCopy(this->_renderer, opTextTexture, NULL, &opTextLocation);
+	if (op_score != -22)
+	{
+		SDL_Surface* opTextSurface = TTF_RenderText_Solid(font, "Opponent Score :", foregroundColor);
+		if (opTextSurface == NULL)
+			throw SDL_error("Unable to Render opTextSurface");
+		SDL_Texture* opTextTexture = SDL_CreateTextureFromSurface(this->_renderer, opTextSurface);
+		if (opTextTexture == NULL)
+			throw SDL_error("Unable to Render opTextTexture");
+		SDL_Rect opTextLocation = { x - 138, y - SCORE_AREA + 2 , 110, 19 };
+		SDL_RenderCopy(this->_renderer, opTextTexture, NULL, &opTextLocation);
 
-	std::stringstream op_strs;
-	op_strs << op_score;
-	SDL_Surface* opScoreSurface = TTF_RenderText_Solid(font, op_strs.str().c_str(), foregroundColor);
-	if (opScoreSurface == NULL)
-		throw SDL_error("Unable to Render opScoreSurface");
-	SDL_Texture* opScoreTexture = SDL_CreateTextureFromSurface(this->_renderer, opScoreSurface);
-	if (opScoreTexture == NULL)
-		throw SDL_error("Unable to Render opScoreTexture");
-	SDL_Rect opScoreLocation = { x - 28, y - SCORE_AREA + 2 , 20, 19 };
-	SDL_RenderCopy(this->_renderer, opScoreTexture, NULL, &opScoreLocation);
+		std::stringstream op_strs;
+		op_strs << op_score;
+		SDL_Surface* opScoreSurface = TTF_RenderText_Solid(font, op_strs.str().c_str(), foregroundColor);
+		if (opScoreSurface == NULL)
+			throw SDL_error("Unable to Render opScoreSurface");
+		SDL_Texture* opScoreTexture = SDL_CreateTextureFromSurface(this->_renderer, opScoreSurface);
+		if (opScoreTexture == NULL)
+			throw SDL_error("Unable to Render opScoreTexture");
+		SDL_Rect opScoreLocation = { x - 28, y - SCORE_AREA + 2 , 20, 19 };
+		SDL_RenderCopy(this->_renderer, opScoreTexture, NULL, &opScoreLocation);
+
+		SDL_FreeSurface(opTextSurface);
+		SDL_FreeSurface(opScoreSurface);
+	}
 
 	SDL_FreeSurface(artSurface);
 	SDL_FreeSurface(textSurface);
 	SDL_FreeSurface(scoreSurface);
-	SDL_FreeSurface(opTextSurface);
-	SDL_FreeSurface(opScoreSurface);
+	
 	TTF_CloseFont(font);
 }

@@ -121,7 +121,8 @@ void		SFMLclass::drawBorders(int x, int y, int score) const
 	strs << score;
 	sf::Text text;
 	sf::Font font;
-	font.loadFromFile("./Libs_includes/Arial.ttf");
+	if (!font.loadFromFile("./Libs_includes/Arial.ttf"))
+		throw SDL_error("Unable to open Font File");
 	text.setFont(font);
 	text.setString("Score: " + strs.str());
 	text.setCharacterSize(24);
@@ -134,8 +135,8 @@ void		SFMLclass::drawBorders(int x, int y, int score) const
 void playChew()
 {
 	sf::SoundBuffer buffer;
- 	buffer.loadFromFile("Libs_includes/chew.wav");
-
+ 	if (!buffer.loadFromFile("Libs_includes/chew.wav"))
+		return;
 	sf::Sound sound;
 	sound.setBuffer(buffer);
 	sound.play();
@@ -145,7 +146,8 @@ void playChew()
 void playCrash()
 {
 	sf::SoundBuffer buffer;
- 	buffer.loadFromFile("Libs_includes/crash.wav");
+	if(!buffer.loadFromFile("Libs_includes/crash.wav"))
+		return;
 
 	sf::Sound sound;
 	sound.setBuffer(buffer);
@@ -174,19 +176,25 @@ void	SFMLclass::playSound(Sound sound)
 
 void		SFMLclass::drawGameOver(int x, int y, int score, int op_score) const
 {
-	this->drawBorders(x, y, score);
+	
 
-	std::stringstream strs;
-	strs << op_score;
+	this->drawBorders(x, y, score);
 	sf::Text text;
 	sf::Font font;
 	font.loadFromFile("./Libs_includes/Arial.ttf");
 	text.setFont(font);
-	text.setString("Opponent Score: " + strs.str());
-	text.setCharacterSize(24);
-	text.setFillColor(sf::Color::Red);
-	text.setPosition((x * 2) - 225, (y * 2) - (SCORE_AREA * 2) + 6);
-	this->_window->draw(text);
+
+	if (op_score != -22)
+	{
+		std::stringstream strs;
+		strs << op_score;
+		
+		text.setString("Opponent Score: " + strs.str());
+		text.setCharacterSize(24);
+		text.setFillColor(sf::Color::Red);
+		text.setPosition((x * 2) - 225, (y * 2) - (SCORE_AREA * 2) + 6);
+		this->_window->draw(text);
+	}
 
 	text.setFont(font);
 	text.setString("GAME OVER");
@@ -194,4 +202,5 @@ void		SFMLclass::drawGameOver(int x, int y, int score, int op_score) const
 	text.setFillColor(sf::Color::Red);
 	text.setPosition((x * 2) / 3, y - (SCORE_AREA * 2));
 	this->_window->draw(text);
+	
 }
