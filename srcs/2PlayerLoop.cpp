@@ -49,12 +49,15 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 		switch(dir)
 		{
 			case lib1:
+				delete sdl;
 				sdl = loadLib("lib1.so", hndl, x_max, y_max, oldDir);
 				break;
 			case lib2:
+				delete sdl;
 				sdl = loadLib("lib2.so", hndl, x_max, y_max, oldDir);
 				break;
 			case lib3:
+				delete sdl;
 				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
 				break;
 			case quit:
@@ -172,12 +175,15 @@ void	ClientGameLoop(int lib, std::string ip)
 		switch(dir)
 		{
 			case lib1:
+				delete sdl;
 				sdl = loadLib("lib1.so", hndl, x_max, y_max, oldDir);
 				break;
 			case lib2:
+				delete sdl;
 				sdl = loadLib("lib2.so", hndl, x_max, y_max, oldDir);
 				break;
 			case lib3:
+				delete sdl;
 				sdl = loadLib("lib3.so", hndl, x_max, y_max, oldDir);
 				break;
 			case quit:
