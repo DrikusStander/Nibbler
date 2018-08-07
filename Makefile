@@ -36,6 +36,7 @@ dependancies:
 	brew list sdl2_net &>/dev/null || brew install sdl2_net
 	brew list fltk &>/dev/null || brew install fltk
 	brew list sfml &>/dev/null || brew install sfml
+	brew list allegro &>/dev/null || brew install allegro
 
 clean:
 	rm -fr $(NAME)
