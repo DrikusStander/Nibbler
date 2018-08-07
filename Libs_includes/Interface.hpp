@@ -20,11 +20,6 @@ class SDLinterface
 {
 	private:
 	protected:
-
-		// SDL_Window		*_window;
-		// SDL_Renderer	*_renderer;
-		// SDL_Rect		_rect;
-		// SDL_Event 		_event;
 		Direction		_dir;
 
 	public:

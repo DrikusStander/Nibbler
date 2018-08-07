@@ -1,24 +1,30 @@
 # -Wall -Werror -Wextra
-FLAGS =  -Iincludes -ISDL_includes -std=c++11 $(shell pkg-config --cflags --libs sdl2_net)
+FLAGS =  -Iincludes -ILibs_includes -std=c++11 $(shell pkg-config --cflags --libs sdl2_net)
 LIBFLAGS = -dynamiclib -flat_namespace
 SDLFLAGS = $(shell pkg-config --cflags --libs sdl2) $(shell pkg-config --cflags --libs sdl2_ttf) $(shell pkg-config --cflags --libs sdl2_mixer)
-FLTKFLAGS = -I/goinfre/hstander/.brew/Cellar/fltk/1.3.4-2/include -L/goinfre/hstander/.brew/Cellar/fltk/1.3.4-2/ib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT -lfltk
+FLTKFLAGS = -I/goinfre/hstander/.brew/Cellar/fltk/1.3.4-2/include -L/goinfre/hstander/.brew/Cellar/fltk/1.3.4-2/lib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT -lfltk $(shell pkg-config --cflags --libs sdl2_mixer)
+SFMLFLAGS = -I/goinfre/hstander/.brew/Cellar/sfml/2.4.2_1/include -L/goinfre/hstander/.brew/lib -lsfml-graphics -lsfml-window -lsfml-audio
+ALLEGROFLAGS = $(shell pkg-config --cflags --libs allegro-5 allegro_audio-5 allegro_acodec-5)
 DIR = ./srcs/
-SDLDIR = ./SDL_srcs/
-SRCS = main.cpp Snake.cpp Fruit.cpp GameLoop.cpp 2PlayerLoop.cpp TCP.cpp ../SDL_srcs/Exceptions.cpp
+SDLDIR = ./Libs_srcs/
+SRCS = main.cpp Snake.cpp Fruit.cpp GameLoop.cpp 2PlayerLoop.cpp TCP.cpp ../Libs_srcs/Exceptions.cpp
 SDLSRC = SDLclass.cpp Exceptions.cpp
-SDLSRC2 = SDLclass2.cpp Draw.cpp Exceptions.cpp
-SDLSRC3 = SDLclass3.cpp Exceptions.cpp
+FLTKSRC = FLTKclass.cpp Draw.cpp Exceptions.cpp
+SFMLSRC = SFMLclass.cpp Exceptions.cpp
 
 NAME = Nibler
 	
 all: libs
 	clang++ $(addprefix $(DIR), $(SRCS)) $(FLAGS) -o $(NAME) $(SDLFLAGS)
+ifneq ($(LD_LIBRARY_PATH),$(HOME)/.brew/lib)
+	@echo "export LD_LIBRARY_PATH=~/.brew/lib" >> ~/.zshrc
+	@exec zsh;
+endif
 
 libs: dependancies
 	clang++ $(addprefix $(SDLDIR), $(SDLSRC)) $(LIBFLAGS) $(FLAGS) $(SDLFLAGS) -o lib1.so
-	clang++ $(addprefix $(SDLDIR), $(SDLSRC2)) $(LIBFLAGS) $(FLAGS) $(FLTKFLAGS) -o lib2.so
-	clang++ $(addprefix $(SDLDIR), $(SDLSRC3)) $(LIBFLAGS) $(FLAGS) $(SDLFLAGS) -o lib3.so
+	clang++ $(addprefix $(SDLDIR), $(FLTKSRC)) $(LIBFLAGS) $(FLAGS) $(FLTKFLAGS) $(ALLEGROFLAGS) -o lib2.so
+	clang++ $(addprefix $(SDLDIR), $(SFMLSRC)) $(LIBFLAGS) $(FLAGS) $(SFMLFLAGS) -o lib3.so
 
 
 
@@ -29,6 +35,7 @@ dependancies:
 	brew list sdl2_mixer &>/dev/null || brew install sdl2_mixer
 	brew list sdl2_net &>/dev/null || brew install sdl2_net
 	brew list fltk &>/dev/null || brew install fltk
+	brew list sfml &>/dev/null || brew install sfml
 
 clean:
 	rm -fr $(NAME)

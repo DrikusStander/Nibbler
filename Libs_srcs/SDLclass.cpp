@@ -1,21 +1,22 @@
 
-#include "SDLclass3.hpp"
+#include "SDLclass.hpp"
 
 int SCORE_AREA = 20;
 
-SDLclass3 *maker( int x, int y, Direction dir)
+SDLclass *maker( int x, int y, Direction dir)
 {
-	return new SDLclass3(x, y, dir);
+	return new SDLclass(x, y, dir);
 }
 
-SDLclass3::SDLclass3( void )
+SDLclass::SDLclass( void )
 {
 	return;
 }
 
-SDLclass3::SDLclass3(int x, int y, Direction dir)
+SDLclass::SDLclass(int x, int y, Direction dir)
 {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
 	TTF_Init();
 
 	SDL_CreateWindowAndRenderer(x, y, 0, &this->_window, &this->_renderer);
@@ -25,7 +26,7 @@ SDLclass3::SDLclass3(int x, int y, Direction dir)
 	return;
 }
 
-SDLclass3::SDLclass3(SDLclass3 const & src)
+SDLclass::SDLclass(SDLclass const & src)
 {
 	this->_rect = src._rect;
 	this->_renderer = src._renderer;
@@ -34,14 +35,25 @@ SDLclass3::SDLclass3(SDLclass3 const & src)
 	return;
 }
 
-SDLclass3::~SDLclass3( void )
+SDLclass::~SDLclass( void )
 {
 	TTF_Quit();
+	int freq;
+	int channel;
+	Uint16 format;
+	int count = Mix_QuerySpec(&freq, &format, &channel);
+	while(count)
+	{
+		Mix_CloseAudio();
+		count--;
+	}
+	while(Mix_Init(0))
+		Mix_Quit();
 	SDL_Quit();
 	return;
 }
 
-SDLclass3	const & SDLclass3::operator=(SDLclass3 const & rhs)
+SDLclass	const & SDLclass::operator=(SDLclass const & rhs)
 {
 	this->_rect = rhs._rect;
 	this->_renderer = rhs._renderer;
@@ -50,7 +62,7 @@ SDLclass3	const & SDLclass3::operator=(SDLclass3 const & rhs)
 	return(*this);
 }
 
-Direction	SDLclass3::getInput( void )
+Direction	SDLclass::getInput( void )
 {
 	SDL_Delay(50);
 	if (SDL_PollEvent(&this->_event)) 
@@ -91,29 +103,27 @@ Direction	SDLclass3::getInput( void )
 	return(this->_dir);
 }
 
-void		SDLclass3::draw(int x, int y, int red, int green, int blue)
+void		SDLclass::draw(int x, int y, int red, int green, int blue)
 {
 	this->_rect.x = x;
 	this->_rect.y = y;
-	SDL_SetRenderDrawColor(this->_renderer, red - 100, green - 200, blue , SDL_ALPHA_OPAQUE);
-	SDL_RenderFillRect(this->_renderer,	&this->_rect);
-	SDL_SetRenderDrawColor(this->_renderer, red - 50, green - 150 , blue , SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(this->_renderer, red, green, blue, SDL_ALPHA_OPAQUE);
 	SDL_RenderDrawRect(this->_renderer,	&this->_rect);
-
+	SDL_RenderFillRect(this->_renderer,	&this->_rect);
 }
 
-void		SDLclass3::clearRender( void ) const
+void		SDLclass::clearRender( void ) const
 {
 	SDL_SetRenderDrawColor(this->_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(this->_renderer);
 }
 
-void		SDLclass3::render( void ) const
+void		SDLclass::render( void ) const
 {
 	SDL_RenderPresent(this->_renderer);
 }
 
-void		SDLclass3::drawBorders(int x, int y, int score) const
+void		SDLclass::drawBorders(int x, int y, int score) const
 {
 	SDL_SetRenderDrawColor(this->_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_Rect GameWrect;
@@ -129,7 +139,7 @@ void		SDLclass3::drawBorders(int x, int y, int score) const
 	ScoreWrect.h = SCORE_AREA - 1;
 	SDL_RenderDrawRect(this->_renderer,	&ScoreWrect);
 
-	TTF_Font* font = TTF_OpenFont("./SDL_includes/Arial.ttf", 12);
+	TTF_Font* font = TTF_OpenFont("./Libs_includes/Arial.ttf", 20);
 	if (font == NULL)
 		throw SDL_error("Unable to open Font File");
 	SDL_Color foregroundColor = { 255, 255, 255, 255 };
@@ -158,7 +168,6 @@ void		SDLclass3::drawBorders(int x, int y, int score) const
 	TTF_CloseFont(font);
 }
 
-
 void playChew()
 {
 	Mix_Chunk *chew = NULL;
@@ -166,7 +175,7 @@ void playChew()
 	{
 		throw SDL_error("Unable to open Audio File");
 	}
-	if ((chew = Mix_LoadWAV("SDL_includes/chew.wav")) == NULL)
+	if ((chew = Mix_LoadWAV("Libs_includes/chew.wav")) == NULL)
 	{
 		throw SDL_error("Unable to load Audio file");
 	}
@@ -183,7 +192,7 @@ void playCrash()
 	{
 		throw SDL_error("Unable to open Audio File");
 	}
-	if ((crash = Mix_LoadWAV("SDL_includes/crash.wav")) == NULL)
+	if ((crash = Mix_LoadWAV("Libs_includes/crash.wav")) == NULL)
 	{
 		throw SDL_error("Unable to load Audio file");
 	}
@@ -193,7 +202,7 @@ void playCrash()
 	Mix_FreeChunk(crash);
 }
 
-void	SDLclass3::playSound(Sound sound)
+void	SDLclass::playSound(Sound sound)
 {
 	switch (sound)
 	{
@@ -212,7 +221,7 @@ void	SDLclass3::playSound(Sound sound)
 	}
 }
 
-void		SDLclass3::drawGameOver(int x, int y, int score, int op_score) const
+void		SDLclass::drawGameOver(int x, int y, int score, int op_score) const
 {
 	SDL_SetRenderDrawColor(this->_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_Rect GameWrect;
@@ -228,7 +237,7 @@ void		SDLclass3::drawGameOver(int x, int y, int score, int op_score) const
 	ScoreWrect.h = SCORE_AREA - 1;
 	SDL_RenderDrawRect(this->_renderer,	&ScoreWrect);
 
-	TTF_Font* font = TTF_OpenFont("./SDL_includes/Arial.ttf", 50);
+	TTF_Font* font = TTF_OpenFont("./Libs_includes/Arial.ttf", 50);
 	if (font == NULL)
 		throw SDL_error("Unable to open Font File");
 	SDL_Color foregroundColor = { 255, 255, 255, 255 };
@@ -242,7 +251,7 @@ void		SDLclass3::drawGameOver(int x, int y, int score, int op_score) const
 	SDL_Rect artLocation = { x / 4, (y - SCORE_AREA) / 4 , x / 2 , (y - SCORE_AREA) / 2 };
 	SDL_RenderCopy(this->_renderer, artTexture, NULL, &artLocation);
 	
-	font = TTF_OpenFont("./SDL_includes/Arial.ttf", 20);
+	font = TTF_OpenFont("./Libs_includes/Arial.ttf", 20);
 
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Score :", foregroundColor);
 	if (textSurface == NULL)

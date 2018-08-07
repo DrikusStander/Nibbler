@@ -11,29 +11,30 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Device.H>
 #include <FL/Fl_Copy_Surface.H>
+#include <SDL_mixer.h>
+
+
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 
 
 #include <unistd.h>
 
 
-class SDLclass2 : public SDLinterface
+class FLTKclass : public SDLinterface
 {
 	private:
-		// SDL_Window		*_window;
-		// SDL_Renderer	*_renderer;
-		// SDL_Rect		_rect;
-		// SDL_Event 		_event;
-
 		Draw *_draw;
 		Fl_Window *_window;
 		int _event;
 	protected:
-		SDLclass2( void );
+		FLTKclass( void );
 	public:
-		SDLclass2(int x, int y, Direction dir);
-		SDLclass2(SDLclass2 const & src);
-		virtual ~SDLclass2( void );
-		SDLclass2	const & operator=(SDLclass2 const & rhs);
+		FLTKclass(int x, int y, Direction dir);
+		FLTKclass(FLTKclass const & src);
+		virtual ~FLTKclass( void );
+		FLTKclass	const & operator=(FLTKclass const & rhs);
 		virtual Direction	getInput( void );
 		virtual void		draw(int x, int y, int red, int green, int blue);
 		virtual void		drawBorders(int x, int y, int score) const;
@@ -45,7 +46,7 @@ class SDLclass2 : public SDLinterface
 };
 
 extern "C" {
-	SDLclass2 *maker(int x, int y, Direction dir);
+	FLTKclass *maker(int x, int y, Direction dir);
 }
 
 #endif

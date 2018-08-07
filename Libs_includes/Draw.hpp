@@ -18,10 +18,14 @@ class Draw : public Fl_Widget
 		int _ymax;
 	public:
 		Draw(int X, int Y, int W, int H);
+		Draw(Draw const & src);
+		~Draw(void);
+		Draw const & operator=(Draw const & rhs);
 		void clear();
 		void update(int x, int y, int w);
 		void draw();
 		void updateBorder(int scoreArea, int score);
+		void twoPGameover(int score, int opscore, int scoreArea);
 
 };
 
