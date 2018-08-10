@@ -15,6 +15,7 @@ SFMLclass::SFMLclass( void )
 
 SFMLclass::SFMLclass(int x, int y, Direction dir)
 {
+	this->_dir  = dir;
 	this->_window = new sf::RenderWindow(sf::VideoMode(x * 2, y * 2), "Nibler");
 	return;
 }

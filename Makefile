@@ -1,5 +1,4 @@
-# -Wall -Werror -Wextra
-FLAGS =  -Iincludes -ILibs_includes -std=c++11 $(shell pkg-config --cflags --libs sdl2_net)
+FLAGS = -Iincludes -ILibs_includes -std=c++11 $(shell pkg-config --cflags --libs sdl2_net)
 LIBFLAGS = -dynamiclib -flat_namespace
 SDLFLAGS = $(shell pkg-config --cflags --libs sdl2) $(shell pkg-config --cflags --libs sdl2_ttf) $(shell pkg-config --cflags --libs sdl2_mixer)
 FLTKFLAGS = -I$(HOME)/.brew/Cellar/fltk/1.3.4-2/include -L$(HOME)/.brew/Cellar/fltk/1.3.4-2/lib -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_THREAD_SAFE -D_REENTRANT -lfltk $(shell pkg-config --cflags --libs sdl2_mixer)
@@ -15,16 +14,16 @@ SFMLSRC = SFMLclass.cpp Exceptions.cpp
 NAME = Nibler
 	
 all: libs
-	clang++ $(addprefix $(DIR), $(SRCS)) $(FLAGS) -o $(NAME) $(SDLFLAGS)
+	clang++ $(addprefix $(DIR), $(SRCS)) $(FLAGS) -o $(NAME) $(SDLFLAGS) -Wall -Wextra -Werror
 ifneq ($(LD_LIBRARY_PATH),$(HOME)/.brew/lib)
 	@echo "export LD_LIBRARY_PATH=~/.brew/lib" >> ~/.zshrc
 	@exec zsh;
 endif
 
 libs: dependancies
-	clang++ $(addprefix $(SDLDIR), $(SDLSRC)) $(LIBFLAGS) $(FLAGS) $(SDLFLAGS) -o lib1.so
+	clang++ $(addprefix $(SDLDIR), $(SDLSRC)) $(LIBFLAGS) $(FLAGS) $(SDLFLAGS) -o lib1.so -Wall -Wextra -Werror
 	clang++ $(addprefix $(SDLDIR), $(FLTKSRC)) $(LIBFLAGS) $(FLAGS) $(FLTKFLAGS) $(ALLEGROFLAGS) -o lib2.so
-	clang++ $(addprefix $(SDLDIR), $(SFMLSRC)) $(LIBFLAGS) $(FLAGS) $(SFMLFLAGS) -o lib3.so
+	clang++ $(addprefix $(SDLDIR), $(SFMLSRC)) $(LIBFLAGS) $(FLAGS) $(SFMLFLAGS) -o lib3.so -Wall -Wextra -Werror
 
 
 
