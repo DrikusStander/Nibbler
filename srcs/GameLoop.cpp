@@ -62,16 +62,23 @@ void	gameLoop( int x_max, int y_max, int lib)
 	int gameover = 0;
 	void *hndl = NULL;
 	SDLinterface *sdl;
-	if (lib == 1)
-		sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
-	else if (lib == 2)
-		sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
-	else
-		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+
+	switch (lib)
+	{
+		case 1:
+			sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
+			break;
+		case 2:
+			sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
+			break;
+		case 3:
+			sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+			break;
+	}
 	int countNum = 50;
-		Obstacles obs[countNum];
-		for (int i = 0; i < countNum; i++)
-			obs[i] = Obstacles(x_max, y_max - SCORE_AREA);
+	Obstacles obs[countNum];
+	for (int i = 0; i < countNum; i++)
+		obs[i] = Obstacles(x_max, y_max - SCORE_AREA);
 
 	while (!gameover)
 	{

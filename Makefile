@@ -25,8 +25,6 @@ libs: dependancies
 	clang++ $(addprefix $(SDLDIR), $(FLTKSRC)) $(LIBFLAGS) $(FLAGS) $(FLTKFLAGS) $(ALLEGROFLAGS) -o lib2.so
 	clang++ $(addprefix $(SDLDIR), $(SFMLSRC)) $(LIBFLAGS) $(FLAGS) $(SFMLFLAGS) -o lib3.so -Wall -Wextra -Werror
 
-
-
 dependancies:
 	brew list sdl2 &>/dev/null || brew install sdl2
 	brew list pkg-config &>/dev/null || brew install pkg-config

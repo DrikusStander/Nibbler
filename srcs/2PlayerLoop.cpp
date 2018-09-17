@@ -16,19 +16,24 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 	int recv = 0;
 	Snake snake(x_start(x_max), y_start(y_max));
 	Fruit fruit(x_max, y_max - SCORE_AREA);
-	int fruit_x = fruit.getX();
-	int fruit_y = fruit.getY();
-	server.send(fruit_x);
-	server.send(fruit_y);
+	int fruit_x = 10 * SNAKE_SIZE ;
+	int fruit_y = 9 * SNAKE_SIZE;
+	fruit.setXY(fruit_x, fruit_y);
 	int gameover = 0;
 	void *hndl = NULL;
 	SDLinterface *sdl;
-	if (lib == 1)
-		sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
-	else if (lib == 2)
-		sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
-	else
-		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+	switch (lib)
+	{
+		case 1:
+			sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
+			break;
+		case 2:
+			sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
+			break;
+		case 3:
+			sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+			break;
+	}
 	while (!gameover)
 	{
 		if (recv == -2)
@@ -44,6 +49,8 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 			fruit_y = fruit.getY();
 			server.send(fruit_y);
 		}
+		else
+			server.send(gameover);
 		dir = sdl->getInput();
 		switch(dir)
 		{
@@ -70,10 +77,11 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 				snake.changeDirection(dir);
 				break;
 		}
-		server.send(gameover);
 		if (gameover)
+		{
+			server.send(gameover);
 			break;
-		snake.moveSnake();
+		}
 		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
 		{
 			gameover = -1;
@@ -82,6 +90,7 @@ void	ServerGameLoop( int x_max, int y_max, int lib)
 			usleep(400000);
 			break;
 		}
+		snake.moveSnake();
 		sdl->clearRender();
 		snake.drawSnake(sdl);
 		fruit.drawFruit(sdl);
@@ -140,18 +149,23 @@ void	ClientGameLoop(int lib, std::string ip)
 	
 	Snake snake(x_start(x_max), y_start(y_max));
 	Fruit fruit;
-	fruit.setXY(client.recv(&fruit_x), client.recv(&fruit_y));
+	fruit.setXY(10 * SNAKE_SIZE, 9 * SNAKE_SIZE);
 	fruit_x = 0;
-	fruit_y = 0;
 	int gameover = 0;
 	void *hndl = NULL;
 	SDLinterface *sdl;
-	if (lib == 1)
-		sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
-	else if (lib == 2)
-		sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
-	else
-		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+	switch (lib)
+	{
+		case 1:
+			sdl = loadLib("lib1.so", hndl, x_max, y_max, dir);
+			break;
+		case 2:
+			sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
+			break;
+		case 3:
+			sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+			break;
+	}
 	while (!gameover)
 	{
 		if (fruit_x < 0)
@@ -164,7 +178,6 @@ void	ClientGameLoop(int lib, std::string ip)
 			client.recv(&fruit_y);
 			fruit.setXY(fruit_x, fruit_y);
 			fruit_x = 0;
-			fruit_y = 0;
 		}
 		dir = sdl->getInput();
 		switch(dir)
@@ -194,7 +207,10 @@ void	ClientGameLoop(int lib, std::string ip)
 		}
 		client.send(gameover);
 		if (gameover)
+		{
+			client.send(gameover);
 			break;
+		}
 		snake.moveSnake();
 		if (snake.checkCollision(x_max, y_max - SCORE_AREA) == 1)
 		{
@@ -205,18 +221,17 @@ void	ClientGameLoop(int lib, std::string ip)
 			break;
 		}
 		sdl->clearRender();
-		snake.drawSnake(sdl);
 		fruit.drawFruit(sdl);
+		snake.drawSnake(sdl);
 		sdl->drawBorders(x_max, y_max, score);
 		sdl->render();
 		if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
 		{
 			sdl->playSound(Chew);
-			client.send(ate_fruit);
-			fruit.setXY(fruit_x, fruit_y);
-			fruit_x = -4;
-			fruit_y = -4;
 			snake.growSnake();
+			client.send(ate_fruit);
+			fruit.setXY(-12, -12);
+			fruit_x = 0;
 			score++;
 		}
 		client.recv(&fruit_x);
