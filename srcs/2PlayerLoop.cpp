@@ -214,8 +214,8 @@ void	ClientGameLoop(int lib, std::string ip)
 			sdl->playSound(Chew);
 			client.send(ate_fruit);
 			fruit.setXY(fruit_x, fruit_y);
-			fruit_x = 0;
-			fruit_y = 0;
+			fruit_x = -4;
+			fruit_y = -4;
 			snake.growSnake();
 			score++;
 		}

@@ -68,8 +68,14 @@ void	gameLoop( int x_max, int y_max, int lib)
 		sdl = loadLib("lib2.so", hndl, x_max, y_max, dir);
 	else
 		sdl = loadLib("lib3.so", hndl, x_max, y_max, dir);
+	int countNum = 50;
+		Obstacles obs[countNum];
+		for (int i = 0; i < countNum; i++)
+			obs[i] = Obstacles(x_max, y_max - SCORE_AREA);
+
 	while (!gameover)
 	{
+		
 		dir = sdl->getInput();
 		switch(dir)
 		{
@@ -109,9 +115,18 @@ void	gameLoop( int x_max, int y_max, int lib)
 		sdl->clearRender();
 		snake.drawSnake(sdl);
 		fruit.drawFruit(sdl);
+		for (int i = 0; i < countNum; i++)
+		{
+			obs[i].drawObstacle(sdl);
+			if (obs[i].CheckObstacles(snake.getHeadX(), snake.getHeadY()))
+			{
+				sdl->playSound(Colide);
+				usleep(400000);
+				gameover = 1;
+			}
+		}
 		sdl->drawBorders(x_max, y_max, score);
 		sdl->render();
-
 		if (fruit.CheckFruitEaten(snake.getHeadX(), snake.getHeadY()))
 		{
 			sdl->playSound(Chew);
@@ -119,6 +134,7 @@ void	gameLoop( int x_max, int y_max, int lib)
 			snake.growSnake();
 			score++;
 		}
+		
 	}
 	sdl->clearRender();
 	sdl->drawGameOver(x_max, y_max, score, -22);

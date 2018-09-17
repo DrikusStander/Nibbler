@@ -11,7 +11,7 @@
 #include <dlfcn.h>
 #include <iostream>
 #include <string>
-#define SNAKE_SIZE 8
+#define SNAKE_SIZE 16
 
 
 enum Direction

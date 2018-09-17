@@ -5,6 +5,7 @@
 #include "Interface.hpp"
 #include "Snake.hpp"
 #include "Fruit.hpp"
+#include "Obstacles.hpp"
 #include <unistd.h>
 #include "TCP.hpp"
 

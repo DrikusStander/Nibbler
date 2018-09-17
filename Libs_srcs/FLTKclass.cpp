@@ -23,10 +23,7 @@ FLTKclass::FLTKclass(int x, int y, Direction dir)
 
 	al_init();
 
-	 al_install_audio();
-
-	
-	// Mix_Init(MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG);
+	al_install_audio();
 	return;
 }
 
@@ -41,7 +38,6 @@ FLTKclass::FLTKclass(FLTKclass const & src)
 FLTKclass::~FLTKclass( void )
 {
 	this->_window->hide();
-	// Mix_Quit();
 	return;
 }
 
