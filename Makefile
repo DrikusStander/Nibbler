@@ -11,7 +11,7 @@ SDLSRC = SDLclass.cpp Exceptions.cpp
 FLTKSRC = FLTKclass.cpp Draw.cpp Exceptions.cpp
 SFMLSRC = SFMLclass.cpp Exceptions.cpp
 
-NAME = Nibler
+NAME = Nibbler
 	
 all: libs
 	clang++ $(addprefix $(DIR), $(SRCS)) $(FLAGS) -o $(NAME) $(SDLFLAGS) -Wall -Wextra -Werror
