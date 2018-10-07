@@ -1,4 +1,4 @@
-# Nibler
+# Nibbler
 
 ###### Description
 This C ++ project makes you recode the Snake game with several different graphical interfaces; the player to be able to switch between the interfaces during the game. This is an opportunity to see how to load and use dynamic libraries in runtime.
